@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "@fontsource/fraunces/400.css";
+@import "@fontsource/fraunces/500.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
+
+@theme {
+  /* Paleta Muzambinho Participa — extraída de MuzambinhoParticipa.jsx */
+  --color-paper: #F4EFE6;
+  --color-surface: #FBF7EF;
+  --color-ink: #1F2419;
+  --color-ink-soft: #3D4435;
+  --color-primary: #2D4A2B;
+  --color-primary-soft: #4A6E45;
+  --color-accent: #C2532E;
+  --color-muted: #8B8678;
+  --color-line: #E3DBC9;
+
+  /* Categorias de desafio */
+  --color-d1: #B8893C;   /* Resíduos — âmbar */
+  --color-d2: #2E5B7E;   /* Esgoto — azul aço */
+  --color-d3: #C2532E;   /* Drenagem — terracota */
+
+  /* Tipografia */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", monospace;
+
+  /* Raio de borda shadcn */
+  --radius: 0.25rem;
+}
+
+/* shadcn base variables (neutral theme) */
+@layer base {
+  :root {
+    --background: var(--color-paper);
+    --foreground: var(--color-ink);
+    --card: var(--color-surface);
+    --card-foreground: var(--color-ink);
+    --popover: var(--color-surface);
+    --popover-foreground: var(--color-ink);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-surface);
+    --secondary: var(--color-line);
+    --secondary-foreground: var(--color-ink-soft);
+    --muted: var(--color-line);
+    --muted-foreground: var(--color-muted);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-surface);
+    --destructive: #ef4444;
+    --border: var(--color-line);
+    --input: var(--color-line);
+    --ring: var(--color-primary);
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Utilitários de animação */
+@layer utilities {
+  .grain {
+    background-image:
+      radial-gradient(circle at 25% 15%, rgba(45, 74, 43, 0.04) 0%, transparent 35%),
+      radial-gradient(circle at 75% 85%, rgba(194, 83, 46, 0.05) 0%, transparent 40%);
+  }
+
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .pin-pulse {
+    animation: pinPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pinPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.15); opacity: 0.85; }
+  }
+}
