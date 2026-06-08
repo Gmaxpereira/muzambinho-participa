@@ -35,7 +35,7 @@ const institutionalActors = [
   {
     icon: GraduationCap,
     title: 'Universidade',
-    subtitle: 'IFSULDEMINAS — câmpus Muzambinho',
+    subtitle: 'PUC Minas - Campus Poços de Caldas',
     desc: 'Responsável pela pesquisa, desenvolvimento e manutenção da plataforma dentro da disciplina de Cidades Inteligentes.',
   },
   {
@@ -86,7 +86,7 @@ export default function SobrePage() {
         </h1>
         <p className="text-lg leading-relaxed" style={{ color: palette.inkSoft }}>
           MVP de participação popular desenvolvido para a Etapa 4 da disciplina de
-          Cidades Inteligentes do IFSULDEMINAS — câmpus Muzambinho. A plataforma
+          Cidades Inteligentes da PUC Minas - Campus Poços de Caldas. A plataforma
           híbrida permite aos cidadãos registrar ocorrências urbanas, acompanhar
           indicadores ISO 37120/22/23 em tempo real e participar de consultas
           públicas que alimentam diretamente o Plano Diretor de Drenagem.
