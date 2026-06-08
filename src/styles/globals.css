@@ -114,3 +114,8 @@
     animation: pinPulse 2s ease-in-out infinite;
   }
 }
+
+/* Leaflet divIcon pin animation — applied via className on the icon wrapper */
+.mp-pin-pulse .mp-pin-inner {
+  animation: pinPulse 2s ease-in-out infinite;
+}

@@ -10,14 +10,14 @@ import type {
 const STORAGE_KEY = 'muzambinho_occurrences'
 
 const initialOccurrences: Occurrence[] = [
-  { id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café', neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias', status: 'Em análise', x: 22, y: 35 },
-  { id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas', neighborhood: 'Comunidade Boa Esperança', date: 'há 5 dias', status: 'Encaminhado', x: 78, y: 28 },
-  { id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias', neighborhood: 'Centro', date: 'há 1 dia', status: 'Em análise', x: 48, y: 55 },
-  { id: 4, type: 'd2', title: 'Vazamento próximo à ETE', neighborhood: 'Bairro São José', date: 'há 4 dias', status: 'Resolvido', x: 56, y: 62 },
-  { id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz', neighborhood: 'Centro', date: 'ontem', status: 'Em análise', x: 45, y: 50 },
-  { id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro', neighborhood: 'Vila Olímpica', date: 'há 3 dias', status: 'Encaminhado', x: 38, y: 68 },
-  { id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal', neighborhood: 'Zona Rural — Pântano', date: 'há 1 semana', status: 'Em análise', x: 18, y: 72 },
-  { id: 8, type: 'd1', title: 'Lixeira comunitária quebrada', neighborhood: 'Bairro do Rosário', date: 'há 6 dias', status: 'Resolvido', x: 52, y: 45 },
+  { id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café', neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias', status: 'Em análise', lat: -21.380, lng: -46.550, x: 22, y: 35 },
+  { id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas', neighborhood: 'Comunidade Boa Esperança', date: 'há 5 dias', status: 'Encaminhado', lat: -21.360, lng: -46.508, x: 78, y: 28 },
+  { id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias', neighborhood: 'Centro', date: 'há 1 dia', status: 'Em análise', lat: -21.370, lng: -46.527, x: 48, y: 55 },
+  { id: 4, type: 'd2', title: 'Vazamento próximo à ETE', neighborhood: 'Bairro São José', date: 'há 4 dias', status: 'Resolvido', lat: -21.375, lng: -46.522, x: 56, y: 62 },
+  { id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz', neighborhood: 'Centro', date: 'ontem', status: 'Em análise', lat: -21.372, lng: -46.528, x: 45, y: 50 },
+  { id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro', neighborhood: 'Vila Olímpica', date: 'há 3 dias', status: 'Encaminhado', lat: -21.368, lng: -46.535, x: 38, y: 68 },
+  { id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal', neighborhood: 'Zona Rural — Pântano', date: 'há 1 semana', status: 'Em análise', lat: -21.400, lng: -46.560, x: 18, y: 72 },
+  { id: 8, type: 'd1', title: 'Lixeira comunitária quebrada', neighborhood: 'Bairro do Rosário', date: 'há 6 dias', status: 'Resolvido', lat: -21.365, lng: -46.520, x: 52, y: 45 },
 ]
 
 const initialConsultations: Consultation[] = [
@@ -51,14 +51,30 @@ export async function getOccurrences(): Promise<Occurrence[]> {
   return initialOccurrences
 }
 
+const MUZAMBINHO_BBOX = { latMin: -21.42, latMax: -21.32, lngMin: -46.58, lngMax: -46.47 }
+
+function randomCoordInMuzambinho() {
+  return {
+    lat: MUZAMBINHO_BBOX.latMin + Math.random() * (MUZAMBINHO_BBOX.latMax - MUZAMBINHO_BBOX.latMin),
+    lng: MUZAMBINHO_BBOX.lngMin + Math.random() * (MUZAMBINHO_BBOX.lngMax - MUZAMBINHO_BBOX.lngMin),
+  }
+}
+
 export async function createOccurrence(dto: CreateOccurrenceDto): Promise<Occurrence> {
   await randomDelay()
   const current = await getOccurrences()
+  const coords = dto.lat != null && dto.lng != null
+    ? { lat: dto.lat, lng: dto.lng }
+    : randomCoordInMuzambinho()
   const newOccurrence: Occurrence = {
     id: Date.now(),
-    ...dto,
+    type: dto.type,
+    title: dto.title,
+    neighborhood: dto.neighborhood,
     date: 'agora',
     status: 'Em análise',
+    lat: coords.lat,
+    lng: coords.lng,
     x: 20 + Math.random() * 60,
     y: 25 + Math.random() * 50,
   }

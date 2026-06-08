@@ -20,6 +20,8 @@ export interface CreateOccurrenceDto {
   type: Category
   title: string
   neighborhood: string
+  lat?: number
+  lng?: number
 }
 
 export interface ConsultationOption {
