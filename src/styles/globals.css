@@ -21,20 +21,31 @@
   --color-line: #E3DBC9;
 
   /* Categorias de desafio */
-  --color-d1: #B8893C;   /* Resíduos — âmbar */
-  --color-d2: #2E5B7E;   /* Esgoto — azul aço */
-  --color-d3: #C2532E;   /* Drenagem — terracota */
+  --color-d1: #B8893C;
+  --color-d2: #2E5B7E;
+  --color-d3: #C2532E;
 
   /* Tipografia */
   --font-display: "Fraunces", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Consolas", monospace;
 
-  /* Raio de borda shadcn */
+  /* Raio de borda */
   --radius: 0.25rem;
 }
 
-/* shadcn base variables (neutral theme) */
+/* Keyframes definidos fora de @layer para compatibilidade garantida */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pinPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.15); opacity: 0.85; }
+}
+
+/* shadcn base variables */
 @layer base {
   :root {
     --background: var(--color-paper);
@@ -58,7 +69,7 @@
   }
 
   * {
-    border-color: var(--color-line);
+    box-sizing: border-box;
   }
 
   body {
@@ -69,19 +80,30 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Classe de display font com optical sizing e tracking do protótipo */
   .font-display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
     letter-spacing: -0.02em;
   }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
-/* Utilitários de animação */
 @layer utilities {
+  /* Textura sutil de grão do protótipo */
   .grain {
     background-image:
       radial-gradient(circle at 25% 15%, rgba(45, 74, 43, 0.04) 0%, transparent 35%),
       radial-gradient(circle at 75% 85%, rgba(194, 83, 46, 0.05) 0%, transparent 40%);
+  }
+
+  /* Fundo do canvas do mapa */
+  .map-bg {
+    background: linear-gradient(135deg, #EFE7D4 0%, #E8DDC4 100%);
   }
 
   .fade-in {
@@ -90,15 +112,5 @@
 
   .pin-pulse {
     animation: pinPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes pinPulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50%       { transform: scale(1.15); opacity: 0.85; }
   }
 }

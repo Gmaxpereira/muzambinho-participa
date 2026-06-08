@@ -1,12 +1,288 @@
+import { Link } from 'react-router-dom'
+import { Trash2, Droplets, CloudRain, ChevronRight, Camera } from 'lucide-react'
+import Stat from '@/features/Stat'
+import ChallengeCard from '@/features/ChallengeCard'
+import KPICard from '@/features/KPICard'
+import { palette } from '@/lib/palette'
+
+// Pins mockados para o preview do mapa
+const previewPins = [
+  { id: 1, type: 'd1' as const, x: 22, y: 35 },
+  { id: 2, type: 'd2' as const, x: 48, y: 55 },
+  { id: 3, type: 'd3' as const, x: 45, y: 50 },
+  { id: 4, type: 'd1' as const, x: 52, y: 45 },
+]
+
+const pinColors = { d1: palette.d1, d2: palette.d2, d3: palette.d3 }
+const pinIcons  = { d1: Trash2, d2: Droplets, d3: CloudRain }
+
+const kpis = [
+  { label: 'Cobertura de coleta',            value: '76%',    delta: '+5pp em 6m',   iso: 'ISO 37120 · 16.1' },
+  { label: 'Cobertura de esgoto',            value: '46,8%',  delta: '+4,2pp em 6m', iso: 'ISO 37120 · 20.1' },
+  { label: 'Pontos de alagamento mapeados',  value: '52',     delta: 'novo cadastro', iso: 'ISO 37123 · 13.3' },
+]
+
 export default function HomePage() {
   return (
-    <main className="max-w-7xl mx-auto px-6 py-20">
-      <h1 className="font-display text-5xl font-medium" style={{ color: 'var(--color-ink)' }}>
-        Muzambinho Participa
-      </h1>
-      <p className="mt-4 text-lg" style={{ color: 'var(--color-ink-soft)' }}>
-        Plataforma híbrida de participação popular para gestão urbana de Muzambinho/MG.
-      </p>
-    </main>
+    <>
+      {/* ── HERO ── */}
+      <section className="grain max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-20">
+        <div className="grid lg:grid-cols-12 gap-10 items-end">
+          {/* Coluna esquerda */}
+          <div className="lg:col-span-8">
+            <div
+              className="font-mono text-xs tracking-[0.3em] uppercase mb-6"
+              style={{ color: palette.accent }}
+            >
+              — Governo aberto · Etapa 4
+            </div>
+            <h1
+              className="font-display font-medium leading-[0.95] mb-8"
+              style={{
+                fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
+                color: palette.ink,
+              }}
+            >
+              A cidade que você{' '}
+              <em style={{ color: palette.accent, fontStyle: 'italic' }}>vive</em>,
+              <br />
+              também é a cidade que você{' '}
+              <span style={{ color: palette.primary }}>desenha.</span>
+            </h1>
+            <p
+              className="text-lg leading-relaxed max-w-2xl"
+              style={{ color: palette.inkSoft }}
+            >
+              Plataforma híbrida de participação popular para fortalecer a gestão
+              urbana de Muzambinho/MG. Registre ocorrências, acompanhe indicadores
+              e ajude a construir o mapa de risco que o município ainda não tem.
+            </p>
+          </div>
+
+          {/* Coluna direita — stats */}
+          <div className="lg:col-span-4 grid grid-cols-3 gap-4 lg:gap-2 lg:block lg:space-y-4">
+            <Stat n="2.111" l="habitantes sem coleta regular" />
+            <Stat n="42,6%" l="cobertura de esgoto" />
+            <Stat n="47,2%" l="déficit de drenagem" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── DESAFIOS ── */}
+      <section style={{ borderTop: `1px solid ${palette.line}`, borderBottom: `1px solid ${palette.line}` }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+          <div className="flex items-baseline justify-between mb-10">
+            <div>
+              <div
+                className="font-mono text-xs tracking-[0.3em] uppercase mb-2"
+                style={{ color: palette.muted }}
+              >
+                03 desafios prioritários
+              </div>
+              <h2
+                className="font-display text-3xl lg:text-4xl font-medium"
+                style={{ color: palette.ink }}
+              >
+                Diagnóstico ABNT NBR ISO 37120/22/23
+              </h2>
+            </div>
+          </div>
+
+          {/* grid gap-px com bg-line cria divisores de 1px entre cards */}
+          <div className="grid md:grid-cols-3 gap-px" style={{ background: palette.line }}>
+            <ChallengeCard
+              code="D1"
+              title="Resíduos Sólidos"
+              desc="2.111 habitantes sem coleta regular e ausência completa de coleta seletiva no município."
+              icon={Trash2}
+              color={palette.d1}
+            />
+            <ChallengeCard
+              code="D2"
+              title="Esgotamento Sanitário"
+              desc="Apenas 42,6% de cobertura e 100% do esgoto coletado lançado in natura."
+              icon={Droplets}
+              color={palette.d2}
+            />
+            <ChallengeCard
+              code="D3"
+              title="Drenagem Urbana"
+              desc="47,2% de déficit em rede pluvial e ausência de mapeamento de áreas de risco."
+              icon={CloudRain}
+              color={palette.d3}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── PREVIEW MAPA ── */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+        <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div>
+            <div
+              className="font-mono text-xs tracking-[0.3em] uppercase mb-2"
+              style={{ color: palette.muted }}
+            >
+              Mapa colaborativo
+            </div>
+            <h2
+              className="font-display text-3xl lg:text-4xl font-medium"
+              style={{ color: palette.ink }}
+            >
+              Ocorrências reportadas pela população
+            </h2>
+          </div>
+          <Link
+            to="/mapa"
+            className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ color: palette.primary }}
+          >
+            Ver mapa completo
+            <ChevronRight size={16} />
+          </Link>
+        </div>
+
+        {/* Canvas SVG do mapa */}
+        <div
+          className="map-bg relative overflow-hidden"
+          style={{
+            aspectRatio: '16 / 11',
+            borderRadius: 4,
+            border: `1px solid ${palette.line}`,
+          }}
+        >
+          {/* SVG topográfico de fundo */}
+          <svg
+            viewBox="0 0 800 550"
+            className="absolute inset-0 w-full h-full"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <pattern id="grid-home" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke={palette.line} strokeWidth="0.5" opacity="0.5" />
+              </pattern>
+            </defs>
+            <rect width="800" height="550" fill="url(#grid-home)" />
+            {/* Curvas topográficas */}
+            <g fill="none" stroke={palette.primarySoft} strokeWidth="1" opacity="0.18">
+              <path d="M 0 200 Q 200 150 400 220 T 800 180" />
+              <path d="M 0 280 Q 200 230 400 300 T 800 260" />
+              <path d="M 0 360 Q 200 310 400 380 T 800 340" />
+              <path d="M 0 130 Q 200 80 400 150 T 800 110" />
+            </g>
+            {/* Rio */}
+            <path
+              d="M 100 0 Q 200 200 250 300 T 400 550"
+              fill="none"
+              stroke={palette.d2}
+              strokeWidth="2"
+              opacity="0.35"
+            />
+            {/* Área urbana */}
+            <ellipse cx="400" cy="320" rx="120" ry="90" fill={palette.primary} opacity="0.06" />
+            <text x="400" y="325" textAnchor="middle" fontFamily="monospace" fontSize="10" fill={palette.muted} letterSpacing="3">
+              SEDE URBANA
+            </text>
+            <text x="150" y="480" fontFamily="monospace" fontSize="9" fill={palette.muted} letterSpacing="2">
+              ZONA RURAL
+            </text>
+            <text x="620" y="100" fontFamily="monospace" fontSize="9" fill={palette.muted} letterSpacing="2">
+              COMUNIDADES
+            </text>
+          </svg>
+
+          {/* Pins mockados */}
+          {previewPins.map((pin) => {
+            const color = pinColors[pin.type]
+            const Icon = pinIcons[pin.type]
+            return (
+              <Link
+                key={pin.id}
+                to="/mapa"
+                className="absolute -translate-x-1/2 -translate-y-1/2 pin-pulse"
+                style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
+                aria-label="Ver ocorrência no mapa"
+              >
+                <div
+                  style={{
+                    width: 28,
+                    height: 28,
+                    background: color,
+                    borderRadius: '50% 50% 50% 0',
+                    transform: 'rotate(-45deg)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: `0 3px 8px rgba(0,0,0,0.18)`,
+                    border: `2px solid ${palette.surface}`,
+                  }}
+                >
+                  <Icon size={12} color={palette.surface} style={{ transform: 'rotate(45deg)' }} />
+                </div>
+              </Link>
+            )
+          })}
+
+          {/* Badge inferior esquerdo */}
+          <div
+            className="absolute bottom-4 left-4 font-mono text-[10px] tracking-wider uppercase px-3 py-2 rounded"
+            style={{
+              background: `${palette.surface}EE`,
+              color: palette.inkSoft,
+              border: `1px solid ${palette.line}`,
+            }}
+          >
+            Muzambinho/MG · 410 km² · {previewPins.length} ocorrências em destaque
+          </div>
+
+          {/* CTA inferior direito */}
+          <Link
+            to="/mapa"
+            className="absolute bottom-4 right-4 flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium shadow-lg transition-opacity hover:opacity-90"
+            style={{ background: palette.ink, color: palette.surface }}
+          >
+            <Camera size={16} />
+            Registrar nesta área
+          </Link>
+        </div>
+      </section>
+
+      {/* ── PREVIEW PAINEL ── */}
+      <section style={{ background: palette.ink, color: palette.surface }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+          <div className="mb-12">
+            <div
+              className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
+              style={{ color: palette.accent }}
+            >
+              Painel de transparência
+            </div>
+            <h2
+              className="font-display text-3xl lg:text-5xl font-medium leading-[1]"
+              style={{ color: palette.surface }}
+            >
+              Indicadores ISO 37120/22/23,
+              <br />
+              <em style={{ color: palette.accent, fontStyle: 'italic' }}>em tempo real.</em>
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6 mb-10">
+            {kpis.map((kpi) => (
+              <KPICard key={kpi.iso} {...kpi} />
+            ))}
+          </div>
+
+          <Link
+            to="/painel"
+            className="inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-100"
+            style={{ color: `${palette.surface}99` }}
+          >
+            Ver painel completo
+            <ChevronRight size={16} />
+          </Link>
+        </div>
+      </section>
+    </>
   )
 }
