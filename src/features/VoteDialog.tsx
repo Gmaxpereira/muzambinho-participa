@@ -49,11 +49,11 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay
-          className="fixed inset-0 z-50 fade-in"
+          className="fixed inset-0 z-[1500] fade-in"
           style={{ background: 'rgba(31,36,25,0.55)' }}
         />
         <Dialog.Content
-          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg p-6 sm:p-8 fade-in overflow-y-auto max-h-[90vh]"
+          className="fixed z-[1500] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg p-6 sm:p-8 fade-in overflow-y-auto max-h-[90vh]"
           style={{
             background: palette.surface,
             borderRadius: 4,

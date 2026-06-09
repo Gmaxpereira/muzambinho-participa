@@ -90,6 +90,8 @@ export default function MapView({ occurrences, selectedPinId, onPinClick, onRegi
         height: 'clamp(300px, 50vw, 520px)',
         borderRadius: 4,
         border: `1px solid ${palette.line}`,
+        isolation: 'isolate',
+        zIndex: 0,
       }}
     >
       <MapContainer
