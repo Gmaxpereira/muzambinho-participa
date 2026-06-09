@@ -2,9 +2,21 @@
 
 Ferramenta híbrida de participação popular para fortalecer a gestão urbana de Muzambinho/MG. A plataforma permite que cidadãos registrem ocorrências de saneamento e drenagem, acompanhem indicadores ISO e participem de consultas públicas que alimentam o Plano Diretor de Drenagem.
 
+## Screenshots
+
+> _Substitua os placeholders abaixo pelos prints reais após rodar `npm run dev`._
+
+| Home | Mapa Colaborativo |
+|------|-------------------|
+| ![Home](docs/screenshots/home.png) | ![Mapa](docs/screenshots/mapa.png) |
+
+| Painel ISO | Consultas Públicas |
+|------------|-------------------|
+| ![Painel](docs/screenshots/painel.png) | ![Consultas](docs/screenshots/consultas.png) |
+
 ## Contexto Acadêmico
 
-Projeto desenvolvido como **Etapa 4** da disciplina de **Cidades Inteligentes**, com base no diagnóstico levantado na Etapa 3 (ABNT NBR ISO 37120/37122/37123). O MVP demonstra um arranjo tripartite — Prefeitura + Universidade + Sociedade Civil — nos níveis de informação, consulta e colaboração da escada de Arnstein (1969).
+Projeto desenvolvido como **Etapa 4** da disciplina de **Cidades Inteligentes** da **PUC Minas — Campus Poços de Caldas**, com base no diagnóstico levantado na Etapa 3 (ABNT NBR ISO 37120/37122/37123). O MVP demonstra um arranjo tripartite — Prefeitura + Universidade + Sociedade Civil — nos níveis de informação, consulta e colaboração da escada de Arnstein (1969).
 
 ## Os 3 Desafios Prioritários
 
@@ -16,14 +28,42 @@ Projeto desenvolvido como **Etapa 4** da disciplina de **Cidades Inteligentes**,
 
 ## Stack
 
-- **Vite** + **React 18** + **TypeScript**
-- **Tailwind CSS v4** (paleta customizada via `@theme`)
-- **shadcn/ui** (componentes base)
-- **react-router-dom** (roteamento SPA)
-- **react-leaflet** + **leaflet** (mapa colaborativo)
-- **recharts** (gráficos do painel)
-- **lucide-react** (ícones)
-- **Fontes**: Fraunces (display) + DM Sans (corpo)
+| Tecnologia | Versão | Papel |
+|---|---|---|
+| Vite | 6.x | Bundler + dev server |
+| React | 19.x | UI framework |
+| TypeScript | 5.x | Tipagem estática (strict) |
+| Tailwind CSS | 4.x | Utilitários CSS + `@theme` customizado |
+| react-router-dom | 7.x | Roteamento SPA |
+| react-leaflet + leaflet | 5.x / 1.9.x | Mapa colaborativo |
+| recharts | 3.x | Gráficos (LineChart, PieChart) |
+| motion | 11.x | Animações de entrada (`whileInView`, stagger) |
+| sonner | latest | Toast notifications |
+| lucide-react | latest | Ícones |
+| Fraunces + DM Sans | latest | Fontes (display + corpo) |
+
+## Decisões Arquiteturais
+
+### Mocks como Services (drop-in para Supabase)
+
+Toda a camada de dados está encapsulada em `src/mocks/`. As funções retornam `Promise<T>` com latência simulada (200–500ms) e persistência via `localStorage`, imitando exatamente o contrato de uma API real.
+
+```
+src/mocks/
+├── index.ts          → getOccurrences(), createOccurrence()
+├── consultations.ts  → getConsultations(), saveVote(), getVotes()
+└── indicators.ts     → getKPIs(), getIndicatorEvolution(), getReportsByCategory()
+```
+
+Para migrar para Supabase em produção, basta substituir cada função por uma chamada `supabase.from(...)` — **nenhum componente precisa mudar**.
+
+### Inline Styles + Palette
+
+A paleta de cores é mantida em `src/lib/palette.ts` como constantes JavaScript, exportada como objeto `palette`. Isso permite usar os tokens diretamente em `style={{}}` preservando type-safety e evitando conflitos com classes CSS dinâmicas.
+
+### Animações Progressivas
+
+Todas as animações usam `whileInView` + `viewport={{ once: true }}` (motion.dev), garantindo que cada seção anima apenas na primeira vez que entra na tela — sem replay ao scrollar de volta.
 
 ## Pré-requisitos
 
@@ -41,9 +81,28 @@ npm run dev
 
 A aplicação estará disponível em `http://localhost:5173`.
 
-## Fluxo de contribuição
+## Build de produção
 
-Cada integrante deve trabalhar em uma branch separada e abrir Pull Request:
+```bash
+npm run build   # gera dist/
+npm run preview # serve o build localmente
+```
+
+## Estrutura de Pastas
+
+```
+src/
+├── components/        # Reutilizáveis: Header, Footer, Layout
+│   └── ui/            # Componentes base (Skeleton)
+├── pages/             # Uma por rota: Home, Mapa, Painel, Consultas, Sobre, 404
+├── features/          # Domínio: MapView, KPICard, OccurrenceRow, VoteDialog…
+├── mocks/             # Serviços async com localStorage (substituível por Supabase)
+├── types/             # index.ts — interfaces TypeScript
+├── lib/               # utils.ts (cn), palette.ts (tokens de cor)
+└── styles/            # globals.css — @theme + fontes + keyframes
+```
+
+## Fluxo de contribuição
 
 ```bash
 git checkout -b feat/nome-da-tarefa
@@ -55,8 +114,6 @@ git push -u origin feat/nome-da-tarefa
 
 ## Convenção de Commits
 
-Seguimos o padrão [Conventional Commits](https://www.conventionalcommits.org/):
-
 | Prefixo | Uso |
 |---------|-----|
 | `feat:` | Nova funcionalidade |
@@ -65,25 +122,15 @@ Seguimos o padrão [Conventional Commits](https://www.conventionalcommits.org/):
 | `docs:` | Documentação |
 | `refactor:` | Refatoração sem bug fix ou feature |
 
-## Estrutura de Pastas
-
-```
-src/
-├── components/   # Componentes reutilizáveis (Header, Footer, etc.)
-├── pages/        # Uma página por rota (Home, Mapa, Painel, Consultas, Sobre)
-├── features/     # Componentes específicos de domínio (MapView, KPI, etc.)
-├── mocks/        # Serviços async com localStorage (substituível por Supabase)
-├── types/        # Interfaces TypeScript (Occurrence, Consultation, Indicator…)
-├── lib/          # Utilitários (cn, formatters)
-└── styles/       # globals.css com CSS variables e Tailwind @theme
-```
-
 ## Equipe
 
 - Gabriel Maximino Rascão Pereira
 - Luiz Roberto Moretti Cavelagna
 - Matheus Henrique Ferreira Neves
 - Vinicius Martins Freire
+
+**Instituição:** PUC Minas — Campus Poços de Caldas  
+**Disciplina:** Cidades Inteligentes — Etapa 4 (2026)
 
 ## Licença
 

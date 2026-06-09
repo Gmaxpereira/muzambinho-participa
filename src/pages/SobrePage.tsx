@@ -1,5 +1,15 @@
 import { Building2, GraduationCap, Users } from 'lucide-react'
+import { motion, type Variants } from 'motion/react'
 import { palette } from '@/lib/palette'
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+}
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
 
 const challenges = [
   {
@@ -69,29 +79,31 @@ export default function SobrePage() {
     <article className="max-w-3xl mx-auto px-6 lg:px-0 py-20">
 
       {/* ── Hero ── */}
-      <div className="mb-14">
-        <div
+      <motion.div className="mb-14" variants={stagger} initial="hidden" animate="visible">
+        <motion.div
+          variants={fadeUp}
           className="font-mono text-xs tracking-[0.3em] uppercase mb-4"
           style={{ color: palette.accent }}
         >
           Sobre o projeto
-        </div>
-        <h1
+        </motion.div>
+        <motion.h1
+          variants={fadeUp}
           className="font-display text-4xl lg:text-5xl font-medium leading-[1.05] mb-6"
           style={{ color: palette.ink }}
         >
           Por que{' '}
           <em style={{ color: palette.primary, fontStyle: 'italic' }}>Muzambinho</em>{' '}
           Participa?
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: palette.inkSoft }}>
+        </motion.h1>
+        <motion.p variants={fadeUp} className="text-lg leading-relaxed" style={{ color: palette.inkSoft }}>
           MVP de participação popular desenvolvido para a Etapa 4 da disciplina de
           Cidades Inteligentes da PUC Minas - Campus Poços de Caldas. A plataforma
           híbrida permite aos cidadãos registrar ocorrências urbanas, acompanhar
           indicadores ISO 37120/22/23 em tempo real e participar de consultas
           públicas que alimentam diretamente o Plano Diretor de Drenagem.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {divider}
 
@@ -110,10 +122,17 @@ export default function SobrePage() {
           Os 3 desafios prioritários
         </h2>
 
-        <div className="grid sm:grid-cols-3 gap-4">
+        <motion.div
+          className="grid sm:grid-cols-3 gap-4"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {challenges.map(c => (
-            <div
+            <motion.div
               key={c.code}
+              variants={fadeUp}
               className="p-6"
               style={{
                 border: `1px solid ${c.color}40`,
@@ -144,9 +163,9 @@ export default function SobrePage() {
               >
                 {c.iso}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {divider}

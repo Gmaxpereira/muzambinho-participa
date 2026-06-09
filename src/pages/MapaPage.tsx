@@ -7,6 +7,7 @@ import MapView from '@/features/MapView'
 import OccurrenceRow from '@/features/OccurrenceRow'
 import OccurrenceDetail from '@/features/OccurrenceDetail'
 import RegisterOccurrenceDialog from '@/features/RegisterOccurrenceDialog'
+import { Skeleton } from '@/components/ui/Skeleton'
 
 const FILTERS: { key: CategoryFilter; label: string; color?: string }[] = [
   { key: 'all', label: 'Tudo' },
@@ -17,12 +18,13 @@ const FILTERS: { key: CategoryFilter; label: string; color?: string }[] = [
 
 export default function MapaPage() {
   const [occurrences, setOccurrences] = useState<Occurrence[]>([])
+  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<CategoryFilter>('all')
   const [selectedPin, setSelectedPin] = useState<Occurrence | null>(null)
   const [showRegister, setShowRegister] = useState(false)
 
   useEffect(() => {
-    getOccurrences().then(setOccurrences)
+    getOccurrences().then(data => { setOccurrences(data); setLoading(false) })
   }, [])
 
   const filtered = useMemo(
@@ -111,6 +113,13 @@ export default function MapaPage() {
                 occ={selectedPin}
                 onClose={() => setSelectedPin(null)}
               />
+            ) : loading ? (
+              <div className="space-y-3" role="status" aria-live="polite" aria-label="Carregando ocorrências">
+                <Skeleton style={{ height: 12, width: '40%', marginBottom: 12 }} />
+                {[1, 2, 3, 4, 5].map(i => (
+                  <Skeleton key={i} style={{ height: 64, width: '100%' }} />
+                ))}
+              </div>
             ) : (
               <>
                 <div
@@ -120,9 +129,44 @@ export default function MapaPage() {
                   Últimas {Math.min(filtered.length, 5)} ocorrências
                 </div>
                 {filtered.length === 0 ? (
-                  <p className="text-sm" style={{ color: palette.muted }}>
-                    Nenhuma ocorrência nesta categoria.
-                  </p>
+                  <div className="py-8 flex flex-col items-center text-center gap-4">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                      <circle cx="32" cy="32" r="24" stroke={palette.primary} strokeOpacity="0.2" strokeWidth="1.5" />
+                      <circle cx="32" cy="32" r="14" stroke={palette.primary} strokeOpacity="0.35" strokeWidth="1" />
+                      {[0, 60, 120, 180, 240, 300].map(deg => {
+                        const r1 = 26, r2 = 31
+                        const rad = (deg * Math.PI) / 180
+                        return (
+                          <line
+                            key={deg}
+                            x1={32 + r1 * Math.cos(rad)}
+                            y1={32 + r1 * Math.sin(rad)}
+                            x2={32 + r2 * Math.cos(rad)}
+                            y2={32 + r2 * Math.sin(rad)}
+                            stroke={palette.primary}
+                            strokeOpacity="0.4"
+                            strokeWidth="1.5"
+                          />
+                        )
+                      })}
+                      <circle cx="32" cy="32" r="3" fill={palette.primary} fillOpacity="0.5" />
+                    </svg>
+                    <div>
+                      <p className="text-sm font-medium" style={{ color: palette.inkSoft }}>
+                        Nenhuma ocorrência nesta categoria.
+                      </p>
+                      <p className="text-xs mt-1" style={{ color: palette.muted }}>
+                        Seja o primeiro a registrar.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setShowRegister(true)}
+                      className="text-xs font-medium px-4 py-2 rounded transition hover:opacity-80"
+                      style={{ background: palette.accent, color: palette.surface }}
+                    >
+                      Registrar ocorrência
+                    </button>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {filtered.slice(0, 5).map(o => (

@@ -1,9 +1,19 @@
 import { Link } from 'react-router-dom'
+import { motion, type Variants } from 'motion/react'
 import { Trash2, Droplets, CloudRain, ChevronRight, Camera } from 'lucide-react'
 import Stat from '@/features/Stat'
 import ChallengeCard from '@/features/ChallengeCard'
 import KPICard from '@/features/KPICard'
 import { palette } from '@/lib/palette'
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+}
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
 
 // Pins mockados para o preview do mapa
 const previewPins = [
@@ -29,14 +39,21 @@ export default function HomePage() {
       <section className="grain max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-20">
         <div className="grid lg:grid-cols-12 gap-10 items-end">
           {/* Coluna esquerda */}
-          <div className="lg:col-span-8">
-            <div
+          <motion.div
+            className="lg:col-span-8"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div
+              variants={fadeUp}
               className="font-mono text-xs tracking-[0.3em] uppercase mb-6"
               style={{ color: palette.accent }}
             >
               — Governo aberto · Etapa 4
-            </div>
-            <h1
+            </motion.div>
+            <motion.h1
+              variants={fadeUp}
               className="font-display font-medium leading-[0.95] mb-8"
               style={{
                 fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
@@ -48,23 +65,29 @@ export default function HomePage() {
               <br />
               também é a cidade que você{' '}
               <span style={{ color: palette.primary }}>desenha.</span>
-            </h1>
-            <p
+            </motion.h1>
+            <motion.p
+              variants={fadeUp}
               className="text-lg leading-relaxed max-w-2xl"
               style={{ color: palette.inkSoft }}
             >
               Plataforma híbrida de participação popular para fortalecer a gestão
               urbana de Muzambinho/MG. Registre ocorrências, acompanhe indicadores
               e ajude a construir o mapa de risco que o município ainda não tem.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Coluna direita — stats */}
-          <div className="lg:col-span-4 grid grid-cols-3 gap-4 lg:gap-2 lg:block lg:space-y-4">
-            <Stat n="2.111" l="habitantes sem coleta regular" />
-            <Stat n="42,6%" l="cobertura de esgoto" />
-            <Stat n="47,2%" l="déficit de drenagem" />
-          </div>
+          <motion.div
+            className="lg:col-span-4 grid grid-cols-3 gap-4 lg:gap-2 lg:block lg:space-y-4"
+            variants={stagger}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={fadeUp}><Stat n="2.111" l="habitantes sem coleta regular" /></motion.div>
+            <motion.div variants={fadeUp}><Stat n="42,6%" l="cobertura de esgoto" /></motion.div>
+            <motion.div variants={fadeUp}><Stat n="47,2%" l="déficit de drenagem" /></motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -89,29 +112,42 @@ export default function HomePage() {
           </div>
 
           {/* grid gap-px com bg-line cria divisores de 1px entre cards */}
-          <div className="grid md:grid-cols-3 gap-px" style={{ background: palette.line }}>
-            <ChallengeCard
-              code="D1"
-              title="Resíduos Sólidos"
-              desc="2.111 habitantes sem coleta regular e ausência completa de coleta seletiva no município."
-              icon={Trash2}
-              color={palette.d1}
-            />
-            <ChallengeCard
-              code="D2"
-              title="Esgotamento Sanitário"
-              desc="Apenas 42,6% de cobertura e 100% do esgoto coletado lançado in natura."
-              icon={Droplets}
-              color={palette.d2}
-            />
-            <ChallengeCard
-              code="D3"
-              title="Drenagem Urbana"
-              desc="47,2% de déficit em rede pluvial e ausência de mapeamento de áreas de risco."
-              icon={CloudRain}
-              color={palette.d3}
-            />
-          </div>
+          <motion.div
+            className="grid md:grid-cols-3 gap-px"
+            style={{ background: palette.line }}
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.div variants={fadeUp}>
+              <ChallengeCard
+                code="D1"
+                title="Resíduos Sólidos"
+                desc="2.111 habitantes sem coleta regular e ausência completa de coleta seletiva no município."
+                icon={Trash2}
+                color={palette.d1}
+              />
+            </motion.div>
+            <motion.div variants={fadeUp}>
+              <ChallengeCard
+                code="D2"
+                title="Esgotamento Sanitário"
+                desc="Apenas 42,6% de cobertura e 100% do esgoto coletado lançado in natura."
+                icon={Droplets}
+                color={palette.d2}
+              />
+            </motion.div>
+            <motion.div variants={fadeUp}>
+              <ChallengeCard
+                code="D3"
+                title="Drenagem Urbana"
+                desc="47,2% de déficit em rede pluvial e ausência de mapeamento de áreas de risco."
+                icon={CloudRain}
+                color={palette.d3}
+              />
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -267,11 +303,19 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6 mb-10">
+          <motion.div
+            className="grid lg:grid-cols-3 gap-6 mb-10"
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {kpis.map((kpi) => (
-              <KPICard key={kpi.iso} {...kpi} />
+              <motion.div key={kpi.iso} variants={fadeUp}>
+                <KPICard {...kpi} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <Link
             to="/painel"

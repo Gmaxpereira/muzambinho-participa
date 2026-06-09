@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { motion, type Variants } from 'motion/react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell,
@@ -8,7 +9,17 @@ import type { Indicator, IndicatorEvolutionPoint, CategoryReport } from '@/types
 import { getKPIs, getIndicatorEvolution, getReportsByCategory } from '@/mocks/indicators'
 import KPICard from '@/features/KPICard'
 import ISOTable from '@/features/ISOTable'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { palette } from '@/lib/palette'
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+}
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
 
 const tooltipStyle = {
   background: palette.ink,
@@ -50,31 +61,46 @@ export default function PainelPage() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
 
         {/* ── Hero ── */}
-        <div className="mb-12">
-          <div
+        <motion.div
+          className="mb-12"
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            variants={fadeUp}
             className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
             style={{ color: palette.accent }}
           >
             Painel de transparência
-          </div>
-          <h1
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
             className="font-display text-3xl lg:text-5xl font-medium leading-[1]"
             style={{ color: palette.surface }}
           >
             Indicadores ISO 37120/22/23,
             <br />
             <em style={{ color: palette.accent, fontStyle: 'italic' }}>em tempo real.</em>
-          </h1>
-        </div>
+          </motion.h1>
+        </motion.div>
 
         {/* ── KPIs ── */}
-        <div className="grid sm:grid-cols-3 gap-6 mb-10">
+        <div
+          className="grid sm:grid-cols-3 gap-6 mb-10"
+          role="status"
+          aria-live="polite"
+          aria-label={loading ? 'Carregando indicadores' : 'Indicadores carregados'}
+        >
           {loading
             ? [1, 2, 3].map(i => (
-                <div
+                <Skeleton
                   key={i}
-                  className="animate-pulse p-6 rounded"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', height: 120 }}
+                  style={{
+                    height: 120,
+                    background: 'rgba(255,255,255,0.06)',
+                    borderRadius: 4,
+                  }}
                 />
               ))
             : kpis.map(k => (
@@ -88,7 +114,7 @@ export default function PainelPage() {
 
           {/* LineChart */}
           <div
-            className="lg:col-span-3 p-6"
+            className="lg:col-span-3 p-6 min-w-0"
             style={{
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.08)',
@@ -134,7 +160,7 @@ export default function PainelPage() {
 
           {/* PieChart */}
           <div
-            className="lg:col-span-2 p-6"
+            className="lg:col-span-2 p-6 min-w-0"
             style={{
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.08)',

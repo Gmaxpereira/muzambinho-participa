@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X, CheckCircle2 } from 'lucide-react'
+import { toast } from 'sonner'
 import type { Consultation } from '@/types'
 import { getVotes, saveVote } from '@/mocks/consultations'
 import { palette } from '@/lib/palette'
@@ -34,6 +35,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
     saveVote(consultation.id, selected)
     onVoted(consultation.id, selected)
     setSubmitted(true)
+    toast.success('Voto computado com sucesso!')
   }
 
   function handleOpenChange(val: boolean) {
@@ -51,7 +53,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
           style={{ background: 'rgba(31,36,25,0.55)' }}
         />
         <Dialog.Content
-          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-8 fade-in"
+          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg p-6 sm:p-8 fade-in overflow-y-auto max-h-[90vh]"
           style={{
             background: palette.surface,
             borderRadius: 4,
@@ -74,7 +76,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
                 {consultation?.title}
               </Dialog.Title>
             </div>
-            <Dialog.Close className="ml-4 flex-shrink-0">
+            <Dialog.Close className="ml-4 flex-shrink-0" aria-label="Fechar consulta">
               <X size={18} style={{ color: palette.muted }} />
             </Dialog.Close>
           </div>

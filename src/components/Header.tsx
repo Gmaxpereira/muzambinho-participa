@@ -87,6 +87,8 @@ export default function Header() {
             style={{ color: 'var(--color-ink-soft)' }}
             onClick={() => setMenuOpen(v => !v)}
             aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -95,8 +97,10 @@ export default function Header() {
 
       {/* Nav mobile dropdown */}
       {menuOpen && (
-        <div
+        <nav
+          id="mobile-nav"
           className="md:hidden border-t px-6 py-4 flex flex-col gap-4"
+          aria-label="Navegação mobile"
           style={{
             borderColor: 'var(--color-line)',
             background: 'var(--color-surface)',
@@ -113,7 +117,7 @@ export default function Header() {
               {label}
             </Link>
           ))}
-        </div>
+        </nav>
       )}
     </header>
   )

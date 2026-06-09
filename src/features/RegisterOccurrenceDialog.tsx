@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X, Camera, Send, Trash2, Droplets, CloudRain } from 'lucide-react'
+import { toast } from 'sonner'
 import type { Category, Occurrence } from '@/types'
 import { createOccurrence } from '@/mocks'
 import { palette } from '@/lib/palette'
@@ -38,9 +39,11 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
     try {
       const occ = await createOccurrence({ type, title, neighborhood, lat, lng })
       onCreated(occ)
+      toast.success('Ocorrência registrada com sucesso!')
       reset()
       onClose()
     } catch {
+      toast.error('Erro ao registrar ocorrência. Tente novamente.')
       setLoading(false)
     }
   }
@@ -63,7 +66,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
           style={{ background: 'rgba(31,36,25,0.55)' }}
         />
         <Dialog.Content
-          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-8 fade-in"
+          className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg p-6 sm:p-8 fade-in overflow-y-auto max-h-[90vh]"
           style={{
             background: palette.surface,
             borderRadius: 4,
@@ -86,7 +89,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
                 Descreva o que você viu
               </Dialog.Title>
             </div>
-            <Dialog.Close>
+            <Dialog.Close aria-label="Fechar formulário">
               <X size={18} style={{ color: palette.muted }} />
             </Dialog.Close>
           </div>

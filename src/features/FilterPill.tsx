@@ -11,6 +11,7 @@ export default function FilterPill({ active, onClick, label, color }: FilterPill
   return (
     <button
       onClick={onClick}
+      aria-pressed={active}
       className="px-4 py-1.5 rounded-full text-xs font-medium transition border whitespace-nowrap"
       style={{
         background: active ? palette.ink : 'transparent',
