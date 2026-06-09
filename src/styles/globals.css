@@ -32,6 +32,9 @@
 
   /* Raio de borda */
   --radius: 0.25rem;
+
+  /* Tamanhos de fonte — sobrescreve padrão do Tailwind */
+  --text-xs: 1rem;
 }
 
 /* Keyframes definidos fora de @layer para compatibilidade garantida */
