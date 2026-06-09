@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { MapPin, Send, Menu, X } from 'lucide-react'
 
 const navLinks = [
@@ -11,6 +11,7 @@ const navLinks = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { pathname } = useLocation()
 
   return (
     <header
@@ -55,19 +56,22 @@ export default function Header() {
 
         {/* Nav desktop */}
         <nav
-          className="hidden md:flex items-center gap-8 text-sm"
+          className="hidden md:flex items-center gap-8 text-base"
           style={{ color: 'var(--color-ink-soft)' }}
         >
-          {navLinks.map(({ label, to }) => (
-            <Link
-              key={to}
-              to={to}
-              className="hover:opacity-70 transition-opacity no-underline"
-              style={{ color: 'inherit' }}
-            >
-              {label}
-            </Link>
-          ))}
+          {navLinks.map(({ label, to }) => {
+            const active = pathname === to
+            return (
+              <Link
+                key={to}
+                to={to}
+                className="hover:opacity-70 transition-opacity no-underline font-medium"
+                style={{ color: active ? 'var(--color-accent)' : 'inherit' }}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Right side */}
@@ -106,17 +110,20 @@ export default function Header() {
             background: 'var(--color-surface)',
           }}
         >
-          {navLinks.map(({ label, to }) => (
-            <Link
-              key={to}
-              to={to}
-              className="text-sm font-medium no-underline hover:opacity-70 transition-opacity"
-              style={{ color: 'var(--color-ink-soft)' }}
-              onClick={() => setMenuOpen(false)}
-            >
-              {label}
-            </Link>
-          ))}
+          {navLinks.map(({ label, to }) => {
+            const active = pathname === to
+            return (
+              <Link
+                key={to}
+                to={to}
+                className="text-base font-medium no-underline hover:opacity-70 transition-opacity"
+                style={{ color: active ? 'var(--color-accent)' : 'var(--color-ink-soft)' }}
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </nav>
       )}
     </header>

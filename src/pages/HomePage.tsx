@@ -61,9 +61,10 @@ export default function HomePage() {
               }}
             >
               A cidade que você{' '}
-              <em style={{ color: palette.accent, fontStyle: 'italic' }}>vive</em>,
+              <em style={{ color: palette.accent, fontStyle: 'italic' }}>vive</em>,{' '}
+              também é a{' '}
               <br />
-              também é a cidade que você{' '}
+              cidade que você{' '}
               <span style={{ color: palette.primary }}>desenha.</span>
             </motion.h1>
             <motion.p
@@ -319,8 +320,8 @@ export default function HomePage() {
 
           <Link
             to="/painel"
-            className="inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-100"
-            style={{ color: `${palette.surface}99` }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
+            style={{ background: palette.accent, color: palette.surface }}
           >
             Ver painel completo
             <ChevronRight size={16} />
