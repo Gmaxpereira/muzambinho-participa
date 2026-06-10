@@ -56,11 +56,11 @@ function ProgressCard({ data, delay }: { data: ChallengeProgressData; delay: num
         <div>
           <div
             className="font-mono"
-            style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: palette.muted }}
+            style={{ fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: palette.muted }}
           >
             Desafio {data.category.toUpperCase()}
           </div>
-          <div style={{ fontSize: 15, fontWeight: 600, color: palette.ink, lineHeight: 1.2 }}>
+          <div style={{ fontSize: 18, fontWeight: 600, color: palette.ink, lineHeight: 1.2 }}>
             {meta.title}
           </div>
         </div>
@@ -73,7 +73,7 @@ function ProgressCard({ data, delay }: { data: ChallengeProgressData; delay: num
             display: 'flex',
             justifyContent: 'space-between',
             marginBottom: 7,
-            fontSize: 12,
+            fontSize: 14,
             color: palette.muted,
           }}
         >
@@ -107,7 +107,7 @@ function ProgressCard({ data, delay }: { data: ChallengeProgressData; delay: num
         <div
           style={{
             textAlign: 'right',
-            fontSize: 11,
+            fontSize: 13,
             fontWeight: 700,
             color: meta.color,
             marginTop: 4,
@@ -118,19 +118,18 @@ function ProgressCard({ data, delay }: { data: ChallengeProgressData; delay: num
       </div>
 
       {/* Motivational */}
-      <p style={{ fontSize: 13, color: palette.inkSoft, lineHeight: 1.55, margin: 0 }}>
+      <p style={{ fontSize: 15, color: palette.inkSoft, lineHeight: 1.55, margin: 0 }}>
         {data.motivational}
       </p>
 
       {/* Mini meta */}
       <div
         style={{
-          fontSize: 12,
-          color: palette.muted,
-          padding: '9px 12px',
-          background: `${meta.color}12`,
+          fontSize: 14,
+          color: '#fff',
+          padding: '10px 14px',
+          background: meta.color,
           borderRadius: 4,
-          borderLeft: `3px solid ${meta.color}`,
           lineHeight: 1.4,
         }}
       >
