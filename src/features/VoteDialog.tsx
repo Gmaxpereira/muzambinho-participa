@@ -64,13 +64,13 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
           <div className="flex items-start justify-between mb-6">
             <div>
               <div
-                className="font-mono text-[10px] tracking-widest uppercase mb-2"
+                className="font-mono text-xs tracking-widest uppercase mb-2"
                 style={{ color: palette.accent }}
               >
                 Consulta pública
               </div>
               <Dialog.Title
-                className="font-display text-xl font-medium leading-snug"
+                className="font-display text-2xl font-medium leading-snug"
                 style={{ color: palette.ink }}
               >
                 {consultation?.title}
@@ -88,8 +88,8 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
                 className="flex items-center gap-2 mb-6 px-4 py-3 rounded"
                 style={{ background: `${palette.primary}1A`, color: palette.primary }}
               >
-                <CheckCircle2 size={16} />
-                <span className="text-sm font-medium">Voto registrado com sucesso</span>
+                <CheckCircle2 size={17} />
+                <span className="text-base font-medium">Voto registrado com sucesso</span>
               </div>
 
               <div className="space-y-3">
@@ -100,7 +100,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
 
                   return (
                     <div key={opt.id}>
-                      <div className="flex items-center justify-between text-sm mb-1">
+                      <div className="flex items-center justify-between text-base mb-1">
                         <span
                           style={{
                             color: isChosen ? palette.primary : palette.inkSoft,
@@ -110,7 +110,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
                           {opt.label}
                           {isChosen && ' ✓'}
                         </span>
-                        <span className="font-mono text-xs" style={{ color: palette.muted }}>
+                        <span className="font-mono text-sm" style={{ color: palette.muted }}>
                           {pct}%
                         </span>
                       </div>
@@ -137,13 +137,13 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
                 })}
               </div>
 
-              <div className="mt-4 text-xs text-center" style={{ color: palette.muted }}>
+              <div className="mt-4 text-sm text-center" style={{ color: palette.muted }}>
                 {totalVotes > 0 ? `${totalVotes} participações` : `${consultation?.votes ?? 0} participações`}
               </div>
 
               <button
                 onClick={onClose}
-                className="w-full mt-6 py-3 rounded text-sm font-medium tracking-wider uppercase"
+                className="w-full mt-6 py-3 rounded text-base font-medium tracking-wider uppercase"
                 style={{ background: palette.ink, color: palette.surface }}
               >
                 Fechar
@@ -197,7 +197,7 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
                           />
                         )}
                       </div>
-                      <span className="text-sm" style={{ color: palette.ink }}>
+                      <span className="text-base" style={{ color: palette.ink }}>
                         {opt.label}
                       </span>
                     </label>
@@ -208,13 +208,13 @@ export default function VoteDialog({ consultation, open, onClose, onVoted }: Vot
               <button
                 onClick={handleSubmit}
                 disabled={!selected}
-                className="w-full py-3 rounded text-sm font-medium tracking-wider uppercase transition hover:opacity-90 disabled:opacity-40"
+                className="w-full py-3 rounded text-base font-medium tracking-wider uppercase transition hover:opacity-90 disabled:opacity-40"
                 style={{ background: palette.accent, color: palette.surface }}
               >
                 Registrar voto
               </button>
 
-              <p className="text-[10px] mt-3 text-center" style={{ color: palette.muted }}>
+              <p className="text-xs mt-3 text-center" style={{ color: palette.muted }}>
                 Sua participação alimenta as decisões do Plano Diretor de Drenagem.
               </p>
             </div>
