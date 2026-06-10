@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
-import { Camera, Sun, Moon } from 'lucide-react'
+import 'leaflet.heat'
+import { Camera, Sun, Moon, Layers } from 'lucide-react'
 import type { Occurrence } from '@/types'
 import { palette } from '@/lib/palette'
 
@@ -127,6 +128,34 @@ function FlyToController({ target }: { target: { lat: number; lng: number } | nu
   return null
 }
 
+function HeatmapLayer({ occurrences }: { occurrences: Occurrence[] }) {
+  const map = useMap()
+
+  useEffect(() => {
+    const valid = occurrences.filter(o => o.lat != null && o.lng != null)
+    if (valid.length === 0) return
+
+    const maxSupport = Math.max(...valid.map(o => o.supporters ?? 1))
+    const points: [number, number, number][] = valid.map(o => [
+      o.lat!,
+      o.lng!,
+      (o.supporters ?? 1) / maxSupport,
+    ])
+
+    const heat = L.heatLayer(points, {
+      radius: 28,
+      blur: 15,
+      maxZoom: 17,
+      max: 1.0,
+      gradient: { 0.3: '#2D4A2B', 0.6: '#f0b429', 1.0: '#C2532E' },
+    }).addTo(map)
+
+    return () => { map.removeLayer(heat) }
+  }, [map, occurrences])
+
+  return null
+}
+
 interface MapViewProps {
   occurrences: Occurrence[]
   selectedPinId: number | null
@@ -139,15 +168,21 @@ export default function MapView({ occurrences, selectedPinId, flyTarget, onPinCl
   const [tileStyle, setTileStyle] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('map-tile') as 'light' | 'dark') ?? 'dark'
   })
+  const [viewMode, setViewMode] = useState<'pins' | 'heatmap'>('pins')
 
   const isDark = tileStyle === 'dark'
   const tile = TILES[tileStyle]
   const withCoords = occurrences.filter(o => o.lat != null && o.lng != null)
+  const isHeatmap = viewMode === 'heatmap'
 
   function toggleTile() {
     const next = isDark ? 'light' : 'dark'
     setTileStyle(next)
     localStorage.setItem('map-tile', next)
+  }
+
+  function toggleView() {
+    setViewMode(prev => prev === 'pins' ? 'heatmap' : 'pins')
   }
 
   return (
@@ -170,15 +205,41 @@ export default function MapView({ occurrences, selectedPinId, flyTarget, onPinCl
         <TileLayer key={tileStyle} url={tile.url} attribution={tile.attribution} />
         <MapController occurrences={withCoords} />
         <FlyToController target={flyTarget} />
-        {withCoords.map(occ => (
-          <Marker
-            key={occ.id}
-            position={[occ.lat!, occ.lng!]}
-            icon={createPinIcon(occ, occ.id === selectedPinId, isDark)}
-            eventHandlers={{ click: () => onPinClick(occ) }}
-          />
-        ))}
+        {isHeatmap
+          ? <HeatmapLayer occurrences={withCoords} />
+          : withCoords.map(occ => (
+              <Marker
+                key={occ.id}
+                position={[occ.lat!, occ.lng!]}
+                icon={createPinIcon(occ, occ.id === selectedPinId, isDark)}
+                eventHandlers={{ click: () => onPinClick(occ) }}
+              />
+            ))
+        }
       </MapContainer>
+
+      {/* Toggle heatmap / pins */}
+      <button
+        onClick={toggleView}
+        title={isHeatmap ? 'Mostrar pins individuais' : 'Mostrar mapa de calor'}
+        className="absolute top-3 z-[1001] flex items-center justify-center transition hover:opacity-90"
+        style={{
+          right: 54,
+          width: 34,
+          height: 34,
+          borderRadius: 6,
+          background: isHeatmap
+            ? palette.accent
+            : isDark ? 'rgba(20,20,20,0.75)' : `${palette.surface}EE`,
+          border: `1px solid ${isHeatmap
+            ? palette.accent
+            : isDark ? 'rgba(255,255,255,0.15)' : palette.line}`,
+          color: isHeatmap ? '#fff' : isDark ? '#fff' : palette.inkSoft,
+          backdropFilter: 'blur(4px)',
+        }}
+      >
+        <Layers size={15} />
+      </button>
 
       {/* Toggle light/dark tile */}
       <button
