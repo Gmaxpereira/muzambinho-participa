@@ -6,8 +6,8 @@ import FilterPill from '@/features/FilterPill'
 import MapView from '@/features/MapView'
 import OccurrenceRow from '@/features/OccurrenceRow'
 import OccurrenceDetail from '@/features/OccurrenceDetail'
-import RegisterOccurrenceDialog from '@/features/RegisterOccurrenceDialog'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { useRegisterOccurrence } from '@/contexts/RegisterOccurrenceContext'
 
 const FILTERS: { key: CategoryFilter; label: string; color?: string }[] = [
   { key: 'all', label: 'Tudo' },
@@ -21,7 +21,7 @@ export default function MapaPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<CategoryFilter>('all')
   const [selectedPin, setSelectedPin] = useState<Occurrence | null>(null)
-  const [showRegister, setShowRegister] = useState(false)
+  const { openRegister } = useRegisterOccurrence()
 
   useEffect(() => {
     getOccurrences().then(data => { setOccurrences(data); setLoading(false) })
@@ -43,7 +43,6 @@ export default function MapaPage() {
 
   function handleCreated(occ: Occurrence) {
     setOccurrences(prev => [occ, ...prev])
-    setShowRegister(false)
   }
 
   const filterLabels: Record<CategoryFilter, string> = {
@@ -94,7 +93,7 @@ export default function MapaPage() {
             occurrences={filtered}
             selectedPinId={selectedPin?.id ?? null}
             onPinClick={handlePinClick}
-            onRegisterClick={() => setShowRegister(true)}
+            onRegisterClick={() => openRegister(handleCreated)}
           />
         </div>
 
@@ -160,7 +159,7 @@ export default function MapaPage() {
                       </p>
                     </div>
                     <button
-                      onClick={() => setShowRegister(true)}
+                      onClick={() => openRegister(handleCreated)}
                       className="text-xs font-medium px-4 py-2 rounded transition hover:opacity-80"
                       style={{ background: palette.accent, color: palette.surface }}
                     >
@@ -180,11 +179,6 @@ export default function MapaPage() {
         </div>
       </div>
 
-      <RegisterOccurrenceDialog
-        open={showRegister}
-        onClose={() => setShowRegister(false)}
-        onCreated={handleCreated}
-      />
     </section>
   )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { MapPin, Send, Menu, X } from 'lucide-react'
+import { useRegisterOccurrence } from '@/contexts/RegisterOccurrenceContext'
 
 const navLinks = [
   { label: 'Mapa', to: '/mapa' },
@@ -12,6 +13,7 @@ const navLinks = [
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
+  const { openRegister } = useRegisterOccurrence()
 
   return (
     <header
@@ -79,7 +81,7 @@ export default function Header() {
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
             style={{ background: 'var(--color-accent)', color: 'var(--color-surface)' }}
-            onClick={() => {/* RegisterModal será conectado aqui */}}
+            onClick={() => openRegister()}
           >
             <Send size={14} />
             <span className="hidden sm:inline">Registrar</span>

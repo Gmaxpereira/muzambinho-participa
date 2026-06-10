@@ -39,7 +39,6 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
     try {
       const occ = await createOccurrence({ type, title, neighborhood, lat, lng })
       onCreated(occ)
-      toast.success('Ocorrência registrada com sucesso!')
       reset()
       onClose()
     } catch {
