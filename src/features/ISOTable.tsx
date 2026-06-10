@@ -35,10 +35,10 @@ const categoryColors: Record<string, string> = {
 }
 
 const cellBase: React.CSSProperties = {
-  padding: '14px 16px',
+  padding: '16px 18px',
   borderBottom: '1px solid rgba(255,255,255,0.08)',
   verticalAlign: 'top',
-  fontSize: 13,
+  fontSize: 15,
   lineHeight: '1.5',
   color: palette.surface,
 }
@@ -62,10 +62,10 @@ export default function ISOTable() {
                 <th
                   key={h}
                   style={{
-                    padding: '10px 16px',
+                    padding: '12px 18px',
                     textAlign: 'left',
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 10,
+                    fontSize: 12,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     color: palette.muted,
@@ -90,9 +90,9 @@ export default function ISOTable() {
                       display: 'inline-block',
                       background: `${categoryColors[row.code]}22`,
                       color: categoryColors[row.code],
-                      padding: '3px 8px',
+                      padding: '4px 10px',
                       borderRadius: 3,
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: 600,
                       whiteSpace: 'nowrap',
                     }}
@@ -103,7 +103,7 @@ export default function ISOTable() {
                 <td style={{ ...cellBase, width: '52%', color: `${palette.surface}CC` }}>
                   {row.feature}
                 </td>
-                <td style={{ ...cellBase, width: '26%', fontFamily: 'var(--font-mono)', fontSize: 11, color: palette.muted }}>
+                <td style={{ ...cellBase, width: '26%', fontFamily: 'var(--font-mono)', fontSize: 13, color: palette.muted }}>
                   {row.indicators}
                 </td>
               </tr>
@@ -129,19 +129,19 @@ export default function ISOTable() {
                 display: 'inline-block',
                 background: `${categoryColors[row.code]}22`,
                 color: categoryColors[row.code],
-                padding: '3px 8px',
+                padding: '4px 10px',
                 borderRadius: 3,
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: 600,
                 marginBottom: 10,
               }}
             >
               {row.challenge}
             </span>
-            <p style={{ fontSize: 13, color: `${palette.surface}CC`, lineHeight: '1.5', marginBottom: 10 }}>
+            <p style={{ fontSize: 15, color: `${palette.surface}CC`, lineHeight: '1.5', marginBottom: 10 }}>
               {row.feature}
             </p>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: palette.muted, letterSpacing: '0.05em' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: palette.muted, letterSpacing: '0.05em' }}>
               {row.indicators}
             </p>
           </div>
