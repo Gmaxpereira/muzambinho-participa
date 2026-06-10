@@ -112,10 +112,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* grid gap-px com bg-line cria divisores de 1px entre cards */}
           <motion.div
-            className="grid md:grid-cols-3 gap-px"
-            style={{ background: palette.line }}
+            className="grid md:grid-cols-3 gap-6"
             variants={stagger}
             initial="hidden"
             whileInView="visible"
@@ -171,8 +169,8 @@ export default function HomePage() {
           </div>
           <Link
             to="/mapa"
-            className="flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
-            style={{ color: palette.primary }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
+            style={{ background: palette.accent, color: palette.surface }}
           >
             Ver mapa completo
             <ChevronRight size={16} />
