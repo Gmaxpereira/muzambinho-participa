@@ -1,4 +1,5 @@
 import { TrendingUp } from 'lucide-react'
+import { useCountUp, parseCountUpValue } from '@/hooks/useCountUp'
 
 interface KPICardProps {
   label: string
@@ -8,6 +9,9 @@ interface KPICardProps {
 }
 
 export default function KPICard({ label, value, delta, iso }: KPICardProps) {
+  const { num, decimals, suffix } = parseCountUpValue(value)
+  const { ref, display } = useCountUp(num, 1500, decimals)
+
   return (
     <div
       className="p-6 rounded"
@@ -23,10 +27,11 @@ export default function KPICard({ label, value, delta, iso }: KPICardProps) {
         {label}
       </div>
       <div
+        ref={ref}
         className="font-display text-5xl font-medium mb-2"
         style={{ color: 'var(--color-surface)' }}
       >
-        {value}
+        {display}{suffix}
       </div>
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center gap-1.5" style={{ color: 'var(--color-d1)' }}>
