@@ -18,23 +18,23 @@ interface Rung {
 const rungs: Rung[] = [
   { id: 8, label: 'Controle cidadão',   zone: 'power' },
   { id: 7, label: 'Delegação de poder', zone: 'power' },
-  { id: 6, label: 'Parceria',           zone: 'power', highlight: 'accent',   badge: 'Mapeamento colaborativo', Icon: Map,          isPrimary: true },
+  { id: 6, label: 'Parceria',           zone: 'power', highlight: 'accent',  badge: 'Mapeamento colaborativo', Icon: Map,          isPrimary: true },
   { id: 5, label: 'Pacificação',        zone: 'token' },
-  { id: 4, label: 'Consulta',           zone: 'token', highlight: 'primary',  badge: 'Enquetes e audiências',   Icon: ClipboardList },
-  { id: 3, label: 'Informação',         zone: 'token', highlight: 'primary',  badge: 'Painel de transparência', Icon: BarChart2 },
+  { id: 4, label: 'Consulta',           zone: 'token', highlight: 'primary', badge: 'Enquetes e audiências',   Icon: ClipboardList },
+  { id: 3, label: 'Informação',         zone: 'token', highlight: 'primary', badge: 'Painel de transparência', Icon: BarChart2 },
   { id: 2, label: 'Terapia',            zone: 'none' },
   { id: 1, label: 'Manipulação',        zone: 'none' },
 ]
 
 const zoneConfig: Record<Zone, { bg: string; bar: string; label: string; labelColor: string }> = {
-  power: { bg: `${palette.primary}12`, bar: `${palette.primary}90`, label: 'Poder cidadão',    labelColor: palette.primarySoft },
-  token: { bg: `${palette.d1}12`,      bar: `${palette.d1}80`,      label: 'Tokenismo',        labelColor: palette.d1          },
-  none:  { bg: `${palette.muted}10`,   bar: `${palette.muted}40`,   label: 'Não participação', labelColor: palette.muted       },
+  power: { bg: `${palette.primary}38`, bar: palette.primary,     label: 'Poder cidadão',    labelColor: palette.primarySoft },
+  token: { bg: `${palette.d1}38`,      bar: palette.d1,          label: 'Tokenismo',        labelColor: palette.d1          },
+  none:  { bg: `${palette.muted}28`,   bar: palette.muted,       label: 'Não participação', labelColor: palette.muted       },
 }
 
 const hlConfig: Record<Highlight, { bg: string; bar: string; color: string }> = {
-  primary: { bg: `${palette.primary}18`, bar: palette.primary, color: palette.primary },
-  accent:  { bg: `${palette.accent}18`,  bar: palette.accent,  color: palette.accent  },
+  primary: { bg: `${palette.primary}50`, bar: palette.primary, color: palette.primary },
+  accent:  { bg: `${palette.accent}50`,  bar: palette.accent,  color: palette.accent  },
 }
 
 const STEP = 8
@@ -51,13 +51,13 @@ export default function ArnsteinLadder() {
 
         return (
           <div key={rung.id}>
-            {/* Zone header — shown at the first rung of each zone group */}
+            {/* Zone header */}
             {zoneChanged && (
               <div
                 style={{
                   paddingLeft: indent,
-                  marginBottom: 4,
-                  marginTop: i === 0 ? 0 : 14,
+                  marginBottom: 5,
+                  marginTop: i === 0 ? 0 : 16,
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
@@ -66,20 +66,20 @@ export default function ArnsteinLadder() {
                 <span
                   style={{
                     display: 'inline-block',
-                    width: 18,
-                    height: 1.5,
+                    width: 20,
+                    height: 2,
                     background: zone.labelColor,
-                    opacity: 0.7,
                     flexShrink: 0,
                   }}
                 />
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 9,
-                    letterSpacing: '0.18em',
+                    fontSize: 11,
+                    letterSpacing: '0.15em',
                     textTransform: 'uppercase',
                     color: zone.labelColor,
+                    fontWeight: 600,
                   }}
                 >
                   {zone.label}
@@ -92,9 +92,9 @@ export default function ArnsteinLadder() {
               style={{
                 marginLeft: indent,
                 marginBottom: 3,
-                padding: rung.isPrimary ? '13px 16px' : rung.highlight ? '10px 14px' : '8px 12px',
+                padding: rung.isPrimary ? '14px 18px' : rung.highlight ? '11px 16px' : '9px 14px',
                 background: hl ? hl.bg : zone.bg,
-                borderLeft: `${rung.isPrimary ? 4 : 3}px solid ${hl ? hl.bar : zone.bar}`,
+                borderLeft: `${rung.isPrimary ? 5 : 3}px solid ${hl ? hl.bar : zone.bar}`,
                 borderRadius: '0 4px 4px 0',
                 display: 'flex',
                 alignItems: 'center',
@@ -105,22 +105,21 @@ export default function ArnsteinLadder() {
               }}
             >
               {/* Left: number badge + label */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
                 <div
                   style={{
-                    width: 20,
-                    height: 20,
+                    width: 24,
+                    height: 24,
                     borderRadius: '50%',
-                    background: hl ? hl.color : zone.labelColor,
+                    background: hl ? hl.color : zone.bar,
                     color: '#fff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 9,
+                    fontSize: 11,
                     fontWeight: 700,
                     flexShrink: 0,
-                    opacity: hl ? 1 : 0.45,
                   }}
                 >
                   {rung.id}
@@ -128,9 +127,9 @@ export default function ArnsteinLadder() {
                 <span
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: rung.isPrimary ? 17 : rung.highlight ? 15 : 13,
-                    fontWeight: rung.isPrimary ? 700 : rung.highlight ? 600 : 400,
-                    color: hl ? hl.color : palette.muted,
+                    fontSize: rung.isPrimary ? 19 : rung.highlight ? 17 : 15,
+                    fontWeight: rung.isPrimary ? 700 : rung.highlight ? 600 : 500,
+                    color: hl ? hl.color : palette.inkSoft,
                     lineHeight: 1.2,
                   }}
                 >
@@ -144,20 +143,20 @@ export default function ArnsteinLadder() {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: 5,
-                    background: `${hl.color}14`,
-                    border: `1px solid ${hl.color}40`,
+                    gap: 6,
+                    background: `${hl.color}22`,
+                    border: `1px solid ${hl.color}70`,
                     borderRadius: 99,
-                    padding: rung.isPrimary ? '4px 12px' : '3px 10px',
+                    padding: rung.isPrimary ? '5px 14px' : '4px 11px',
                     flexShrink: 0,
                   }}
                 >
-                  <rung.Icon size={rung.isPrimary ? 12 : 10} style={{ color: hl.color, flexShrink: 0 }} />
+                  <rung.Icon size={rung.isPrimary ? 13 : 12} style={{ color: hl.color, flexShrink: 0 }} />
                   <span
                     style={{
                       fontFamily: 'var(--font-sans)',
-                      fontSize: rung.isPrimary ? 12 : 11,
-                      fontWeight: rung.isPrimary ? 500 : 400,
+                      fontSize: rung.isPrimary ? 13 : 12,
+                      fontWeight: rung.isPrimary ? 600 : 500,
                       color: hl.color,
                       whiteSpace: 'nowrap',
                     }}
@@ -174,12 +173,11 @@ export default function ArnsteinLadder() {
       <p
         style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 11,
+          fontSize: 12,
           color: palette.muted,
           textAlign: 'right',
-          marginTop: 10,
+          marginTop: 12,
           letterSpacing: '0.04em',
-          opacity: 0.65,
         }}
       >
         Adaptado de ARNSTEIN, 1969.
