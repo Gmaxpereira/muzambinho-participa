@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { Camera, Sun, Moon } from 'lucide-react'
@@ -33,6 +33,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   d3: palette.d3,
 }
 
+const DEFAULT_CENTER: L.LatLngExpression = [-21.372, -46.528]
+const DEFAULT_ZOOM = 13
+
 function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.DivIcon {
   const size = selected ? 36 : 28
   const outer = Math.ceil(size * Math.SQRT2) + 4
@@ -41,7 +44,6 @@ function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.D
   const iconSize = selected ? 16 : 12
   const svgPaths = SVG_ICONS[occ.type]
 
-  // Stronger glow on dark tile, subtle on light
   const shadow = selected
     ? isDark
       ? `0 6px 22px ${color}99, 0 0 18px ${color}80`
@@ -50,8 +52,22 @@ function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.D
       ? `0 2px 8px rgba(0,0,0,0.55), 0 0 10px ${color}66`
       : `0 2px 8px rgba(0,0,0,0.22), 0 0 6px ${color}55`
 
+  // Pulsing ring element inside the (rotated) pin — a circle rotated 45deg is still a circle
+  const ringEl = selected
+    ? `<div style="
+        position:absolute;
+        inset:-12px;
+        border-radius:50%;
+        border:2.5px solid ${color};
+        animation:mp-ring-pulse 1.4s ease-out infinite;
+        pointer-events:none;
+      "></div>`
+    : ''
+
   const html = `
     <div class="mp-pin-inner" style="
+      position:relative;
+      overflow:visible;
       width:${size}px; height:${size}px;
       background:${color};
       border-radius:50% 50% 50% 0;
@@ -61,6 +77,7 @@ function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.D
       border:2px solid ${palette.surface};
       transition:all 0.2s;
     ">
+      ${ringEl}
       <svg width="${iconSize}" height="${iconSize}" viewBox="0 0 24 24"
            style="transform:rotate(45deg); flex-shrink:0;">
         ${svgPaths}
@@ -75,6 +92,7 @@ function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.D
   })
 }
 
+// Refits bounds when filtered occurrences change (filter pill interaction)
 function MapController({ occurrences }: { occurrences: Occurrence[] }) {
   const map = useMap()
   useEffect(() => {
@@ -90,14 +108,32 @@ function MapController({ occurrences }: { occurrences: Occurrence[] }) {
   return null
 }
 
+// Handles flyTo on pin select/deselect — skips the first render
+function FlyToController({ target }: { target: { lat: number; lng: number } | null }) {
+  const map = useMap()
+  const isFirst = useRef(true)
+
+  useEffect(() => {
+    if (isFirst.current) { isFirst.current = false; return }
+    if (target) {
+      map.flyTo([target.lat, target.lng], DEFAULT_ZOOM + 2, { animate: true, duration: 0.7 })
+    } else {
+      map.flyTo(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: true, duration: 0.7 })
+    }
+  }, [target, map])
+
+  return null
+}
+
 interface MapViewProps {
   occurrences: Occurrence[]
   selectedPinId: number | null
+  flyTarget: { lat: number; lng: number } | null
   onPinClick: (occ: Occurrence) => void
   onRegisterClick: () => void
 }
 
-export default function MapView({ occurrences, selectedPinId, onPinClick, onRegisterClick }: MapViewProps) {
+export default function MapView({ occurrences, selectedPinId, flyTarget, onPinClick, onRegisterClick }: MapViewProps) {
   const [tileStyle, setTileStyle] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('map-tile') as 'light' | 'dark') ?? 'dark'
   })
@@ -124,13 +160,14 @@ export default function MapView({ occurrences, selectedPinId, onPinClick, onRegi
       }}
     >
       <MapContainer
-        center={[-21.372, -46.528]}
-        zoom={13}
+        center={DEFAULT_CENTER}
+        zoom={DEFAULT_ZOOM}
         style={{ width: '100%', height: '100%' }}
         zoomControl={false}
       >
         <TileLayer key={tileStyle} url={tile.url} attribution={tile.attribution} />
         <MapController occurrences={withCoords} />
+        <FlyToController target={flyTarget} />
         {withCoords.map(occ => (
           <Marker
             key={occ.id}

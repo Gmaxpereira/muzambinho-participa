@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import type { Occurrence, CategoryFilter } from '@/types'
 import { getOccurrences } from '@/mocks'
 import { palette } from '@/lib/palette'
@@ -21,6 +22,7 @@ export default function MapaPage() {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<CategoryFilter>('all')
   const [selectedPin, setSelectedPin] = useState<Occurrence | null>(null)
+  const [flyTarget, setFlyTarget] = useState<{ lat: number; lng: number } | null>(null)
   const { openRegister } = useRegisterOccurrence()
 
   useEffect(() => {
@@ -35,10 +37,18 @@ export default function MapaPage() {
   function handleFilterChange(f: CategoryFilter) {
     setFilter(f)
     setSelectedPin(null)
+    setFlyTarget(null)
   }
 
   function handlePinClick(occ: Occurrence) {
-    setSelectedPin(prev => prev?.id === occ.id ? null : occ)
+    const isDeselect = selectedPin?.id === occ.id
+    setSelectedPin(isDeselect ? null : occ)
+    setFlyTarget(isDeselect || occ.lat == null ? null : { lat: occ.lat, lng: occ.lng! })
+  }
+
+  function handleClose() {
+    setSelectedPin(null)
+    setFlyTarget(null)
   }
 
   function handleCreated(occ: Occurrence) {
@@ -92,6 +102,7 @@ export default function MapaPage() {
           <MapView
             occurrences={filtered}
             selectedPinId={selectedPin?.id ?? null}
+            flyTarget={flyTarget}
             onPinClick={handlePinClick}
             onRegisterClick={() => openRegister(handleCreated)}
           />
@@ -107,19 +118,33 @@ export default function MapaPage() {
               borderRadius: 4,
             }}
           >
-            {selectedPin ? (
-              <OccurrenceDetail
-                occ={selectedPin}
-                onClose={() => setSelectedPin(null)}
-              />
-            ) : loading ? (
+            <AnimatePresence mode="wait">
+              {selectedPin ? (
+                <motion.div
+                  key={selectedPin.id}
+                  initial={{ x: 28, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  transition={{ duration: 0.22, ease: 'easeOut' }}
+                >
+                  <OccurrenceDetail
+                    occ={selectedPin}
+                    onClose={handleClose}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            {!selectedPin && loading && (
               <div className="space-y-3" role="status" aria-live="polite" aria-label="Carregando ocorrências">
                 <Skeleton style={{ height: 12, width: '40%', marginBottom: 12 }} />
                 {[1, 2, 3, 4, 5].map(i => (
                   <Skeleton key={i} style={{ height: 64, width: '100%' }} />
                 ))}
               </div>
-            ) : (
+            )}
+
+            {!selectedPin && !loading && (
               <>
                 <div
                   className="font-mono text-[10px] tracking-widest uppercase mb-3"
