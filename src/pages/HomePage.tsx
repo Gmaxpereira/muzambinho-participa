@@ -154,7 +154,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
         <div className="mb-12">
           <div
-            className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
+            className="font-mono text-sm tracking-[0.3em] uppercase mb-3"
             style={{ color: palette.muted }}
           >
             Participação cidadã
@@ -165,7 +165,7 @@ export default function HomePage() {
           >
             Participar é simples
           </h2>
-          <p className="text-base" style={{ color: palette.muted }}>
+          <p className="text-lg" style={{ color: palette.muted }}>
             Três passos para transformar sua experiência em política pública.
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function HomePage() {
 
               {/* Número do passo */}
               <div
-                className="font-mono text-[10px] tracking-[0.3em] uppercase mb-2"
+                className="font-mono text-xs tracking-[0.3em] uppercase mb-2"
                 style={{ color: palette.muted }}
               >
                 Passo {step}
@@ -244,14 +244,14 @@ export default function HomePage() {
 
               {/* Título */}
               <h3
-                className="font-display text-xl font-medium mb-3"
+                className="font-display text-2xl font-medium mb-3"
                 style={{ color: palette.ink }}
               >
                 {title}
               </h3>
 
               {/* Descrição */}
-              <p className="text-sm leading-relaxed" style={{ color: palette.inkSoft }}>
+              <p className="text-base leading-relaxed" style={{ color: palette.inkSoft }}>
                 {desc}
               </p>
             </motion.div>
