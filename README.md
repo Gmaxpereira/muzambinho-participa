@@ -4,15 +4,13 @@ Ferramenta híbrida de participação popular para fortalecer a gestão urbana d
 
 ## Screenshots
 
-> _Substitua os placeholders abaixo pelos prints reais após rodar `npm run dev`._
-
 | Home | Mapa Colaborativo |
 |------|-------------------|
-| ![Home](docs/screenshots/home.png) | ![Mapa](docs/screenshots/mapa.png) |
+| ![Home](docs/home.png) | ![Mapa](docs/mapa.png) |
 
 | Painel ISO | Consultas Públicas |
 |------------|-------------------|
-| ![Painel](docs/screenshots/painel.png) | ![Consultas](docs/screenshots/consultas.png) |
+| ![Painel](docs/painel.png) | ![Consultas](docs/consultas.png) |
 
 ## Contexto Acadêmico
 
