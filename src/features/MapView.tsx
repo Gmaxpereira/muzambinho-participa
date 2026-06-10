@@ -2,19 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet.heat'
-import { Camera, Sun, Moon, Layers } from 'lucide-react'
+import { Camera, Layers } from 'lucide-react'
 import type { Occurrence } from '@/types'
 import { palette } from '@/lib/palette'
 
-const TILES = {
-  light: {
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  },
-  dark: {
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-  },
+const OSM_TILE = {
+  url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }
 
 const SVG_ICONS: Record<string, string> = {
@@ -37,7 +31,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 const DEFAULT_CENTER: L.LatLngExpression = [-21.372, -46.528]
 const DEFAULT_ZOOM = 13
 
-function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.DivIcon {
+function createPinIcon(occ: Occurrence, selected: boolean): L.DivIcon {
   const popular = (occ.supporters ?? 0) >= 10
   const baseSize = selected ? 36 : 28
   const size = popular && !selected ? Math.round(baseSize * 1.2) : baseSize
@@ -48,12 +42,8 @@ function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.D
   const svgPaths = SVG_ICONS[occ.type]
 
   const shadow = selected
-    ? isDark
-      ? `0 6px 22px ${color}99, 0 0 18px ${color}80`
-      : `0 8px 20px ${color}66, 0 0 10px ${color}55`
-    : isDark
-      ? `0 2px 8px rgba(0,0,0,0.55), 0 0 10px ${color}66`
-      : `0 2px 8px rgba(0,0,0,0.22), 0 0 6px ${color}55`
+    ? `0 8px 20px ${color}66, 0 0 10px ${color}55`
+    : `0 2px 8px rgba(0,0,0,0.22), 0 0 6px ${color}55`
 
   // Pulsing ring element inside the (rotated) pin — a circle rotated 45deg is still a circle
   const ringEl = selected
@@ -135,19 +125,28 @@ function HeatmapLayer({ occurrences }: { occurrences: Occurrence[] }) {
     const valid = occurrences.filter(o => o.lat != null && o.lng != null)
     if (valid.length === 0) return
 
+    // Normalize intensity; boost by 1.8 so isolated points render visibly at zoom 13
     const maxSupport = Math.max(...valid.map(o => o.supporters ?? 1))
     const points: [number, number, number][] = valid.map(o => [
       o.lat!,
       o.lng!,
-      (o.supporters ?? 1) / maxSupport,
+      Math.min(1, ((o.supporters ?? 1) / maxSupport) * 1.8),
     ])
 
     const heat = L.heatLayer(points, {
-      radius: 28,
-      blur: 15,
-      maxZoom: 17,
-      max: 1.0,
-      gradient: { 0.3: '#2D4A2B', 0.6: '#f0b429', 1.0: '#C2532E' },
+      radius: 45,
+      blur: 28,
+      minOpacity: 0.35,
+      maxZoom: 15,
+      max: 0.7,
+      gradient: {
+        0.0: 'transparent',
+        0.2: '#2D4A2B',
+        0.4: '#B8893C',
+        0.6: '#E67A22',
+        0.8: '#C2532E',
+        1.0: '#8B1A1A',
+      },
     }).addTo(map)
 
     return () => { map.removeLayer(heat) }
@@ -165,21 +164,10 @@ interface MapViewProps {
 }
 
 export default function MapView({ occurrences, selectedPinId, flyTarget, onPinClick, onRegisterClick }: MapViewProps) {
-  const [tileStyle, setTileStyle] = useState<'light' | 'dark'>(() => {
-    return (localStorage.getItem('map-tile') as 'light' | 'dark') ?? 'dark'
-  })
   const [viewMode, setViewMode] = useState<'pins' | 'heatmap'>('pins')
 
-  const isDark = tileStyle === 'dark'
-  const tile = TILES[tileStyle]
   const withCoords = occurrences.filter(o => o.lat != null && o.lng != null)
   const isHeatmap = viewMode === 'heatmap'
-
-  function toggleTile() {
-    const next = isDark ? 'light' : 'dark'
-    setTileStyle(next)
-    localStorage.setItem('map-tile', next)
-  }
 
   function toggleView() {
     setViewMode(prev => prev === 'pins' ? 'heatmap' : 'pins')
@@ -202,7 +190,7 @@ export default function MapView({ occurrences, selectedPinId, flyTarget, onPinCl
         style={{ width: '100%', height: '100%' }}
         zoomControl={false}
       >
-        <TileLayer key={tileStyle} url={tile.url} attribution={tile.attribution} />
+        <TileLayer url={OSM_TILE.url} attribution={OSM_TILE.attribution} />
         <MapController occurrences={withCoords} />
         <FlyToController target={flyTarget} />
         {isHeatmap
@@ -211,7 +199,7 @@ export default function MapView({ occurrences, selectedPinId, flyTarget, onPinCl
               <Marker
                 key={occ.id}
                 position={[occ.lat!, occ.lng!]}
-                icon={createPinIcon(occ, occ.id === selectedPinId, isDark)}
+                icon={createPinIcon(occ, occ.id === selectedPinId)}
                 eventHandlers={{ click: () => onPinClick(occ) }}
               />
             ))
@@ -222,51 +210,28 @@ export default function MapView({ occurrences, selectedPinId, flyTarget, onPinCl
       <button
         onClick={toggleView}
         title={isHeatmap ? 'Mostrar pins individuais' : 'Mostrar mapa de calor'}
-        className="absolute top-3 z-[1001] flex items-center justify-center transition hover:opacity-90"
+        className="absolute top-3 right-3 z-[1001] flex items-center justify-center transition hover:opacity-90"
         style={{
-          right: 54,
           width: 34,
           height: 34,
           borderRadius: 6,
-          background: isHeatmap
-            ? palette.accent
-            : isDark ? 'rgba(20,20,20,0.75)' : `${palette.surface}EE`,
-          border: `1px solid ${isHeatmap
-            ? palette.accent
-            : isDark ? 'rgba(255,255,255,0.15)' : palette.line}`,
-          color: isHeatmap ? '#fff' : isDark ? '#fff' : palette.inkSoft,
+          background: isHeatmap ? palette.accent : `${palette.surface}EE`,
+          border: `1px solid ${isHeatmap ? palette.accent : palette.line}`,
+          color: isHeatmap ? '#fff' : palette.inkSoft,
           backdropFilter: 'blur(4px)',
         }}
       >
         <Layers size={15} />
       </button>
 
-      {/* Toggle light/dark tile */}
-      <button
-        onClick={toggleTile}
-        title={isDark ? 'Mudar para mapa claro' : 'Mudar para mapa escuro'}
-        className="absolute top-3 right-3 z-[1001] flex items-center justify-center transition hover:opacity-90"
-        style={{
-          width: 34,
-          height: 34,
-          borderRadius: 6,
-          background: isDark ? 'rgba(20,20,20,0.75)' : `${palette.surface}EE`,
-          border: `1px solid ${isDark ? 'rgba(255,255,255,0.15)' : palette.line}`,
-          color: isDark ? '#fff' : palette.inkSoft,
-          backdropFilter: 'blur(4px)',
-        }}
-      >
-        {isDark ? <Sun size={15} /> : <Moon size={15} />}
-      </button>
-
       {/* Badge */}
       <div
         className="absolute bottom-4 left-4 font-mono text-[10px] tracking-wider uppercase px-3 py-2 z-[1001]"
         style={{
-          background: isDark ? 'rgba(15,15,15,0.70)' : `${palette.surface}EE`,
-          color: isDark ? 'rgba(255,255,255,0.70)' : palette.inkSoft,
+          background: `${palette.surface}EE`,
+          color: palette.inkSoft,
           borderRadius: 4,
-          border: `1px solid ${isDark ? 'rgba(255,255,255,0.10)' : palette.line}`,
+          border: `1px solid ${palette.line}`,
           pointerEvents: 'none',
         }}
       >
