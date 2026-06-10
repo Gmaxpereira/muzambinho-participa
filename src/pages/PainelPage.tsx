@@ -233,7 +233,7 @@ export default function PainelPage() {
           <button
             onClick={() => exportCSV(kpis)}
             disabled={loading}
-            className="flex items-center gap-2 px-6 py-3 rounded text-sm font-medium transition hover:opacity-80 disabled:opacity-40"
+            className="flex items-center gap-2 px-6 py-3 rounded text-sm font-medium transition disabled:opacity-40 hover:bg-white/10 hover:border-white/40 hover:text-white"
             style={{
               border: '1px solid rgba(255,255,255,0.2)',
               color: `${palette.surface}99`,
@@ -245,9 +245,9 @@ export default function PainelPage() {
           </button>
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-8" style={{ color: `${palette.muted}55` }}>
-          <TrendingUp size={12} />
-          <span className="font-mono text-[10px] tracking-wider uppercase">
+        <div className="flex items-center justify-center gap-2 mt-8" style={{ color: `${palette.muted}88` }}>
+          <TrendingUp size={14} />
+          <span className="font-mono text-xs tracking-wider uppercase">
             ABNT NBR ISO 37120 · ISO 37122 · ISO 37123
           </span>
         </div>

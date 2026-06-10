@@ -150,7 +150,7 @@ export default function ISOTable() {
 
       <p
         className="mt-3 text-right"
-        style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: `${palette.muted}99` }}
+        style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: palette.muted }}
       >
         Quadro 1 — Articulação entre desafios, funcionalidades e indicadores. Fonte: os autores (2026).
       </p>
