@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion, type Variants } from 'motion/react'
-import { Trash2, Droplets, CloudRain, ChevronRight, Camera } from 'lucide-react'
+import { Trash2, Droplets, CloudRain, ChevronRight, Camera, MapPin, TrendingUp } from 'lucide-react'
 import Stat from '@/features/Stat'
 import ChallengeCard from '@/features/ChallengeCard'
 import KPICard from '@/features/KPICard'
@@ -148,6 +148,115 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
         </div>
+      </section>
+
+      {/* ── COMO FUNCIONA ── */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+        <div className="mb-12">
+          <div
+            className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
+            style={{ color: palette.muted }}
+          >
+            Participação cidadã
+          </div>
+          <h2
+            className="font-display text-3xl lg:text-4xl font-medium mb-3"
+            style={{ color: palette.ink }}
+          >
+            Participar é simples
+          </h2>
+          <p className="text-base" style={{ color: palette.muted }}>
+            Três passos para transformar sua experiência em política pública.
+          </p>
+        </div>
+
+        <motion.div
+          className="grid md:grid-cols-3 gap-0 relative"
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {/* Linha tracejada — visível apenas em md+ */}
+          <div
+            className="hidden md:block absolute top-[38px] left-[calc(16.66%+20px)] right-[calc(16.66%+20px)]"
+            style={{
+              height: 1,
+              borderTop: `2px dashed ${palette.line}`,
+              zIndex: 0,
+            }}
+          />
+
+          {[
+            {
+              step: '01',
+              title: 'Registre',
+              desc: 'Encontrou um problema? Registre a ocorrência com foto e localização, direto do celular.',
+              Icon: Camera,
+              bg: palette.accent,
+            },
+            {
+              step: '02',
+              title: 'Acompanhe',
+              desc: 'Sua contribuição aparece no mapa colaborativo e alimenta os indicadores ISO do município.',
+              Icon: MapPin,
+              bg: palette.primary,
+            },
+            {
+              step: '03',
+              title: 'Transforme',
+              desc: 'Os dados geram evidências para o Plano Diretor de Drenagem e a expansão da coleta de resíduos.',
+              Icon: TrendingUp,
+              bg: palette.d2,
+            },
+          ].map(({ step, title, desc, Icon, bg }) => (
+            <motion.div
+              key={step}
+              variants={fadeUp}
+              className="relative flex flex-col items-center text-center px-8 py-2"
+              style={{ zIndex: 1 }}
+            >
+              {/* Ícone */}
+              <div
+                style={{
+                  width: 76,
+                  height: 76,
+                  borderRadius: '50%',
+                  background: bg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 20,
+                  flexShrink: 0,
+                  boxShadow: `0 4px 16px ${bg}44`,
+                }}
+              >
+                <Icon size={30} color="#fff" />
+              </div>
+
+              {/* Número do passo */}
+              <div
+                className="font-mono text-[10px] tracking-[0.3em] uppercase mb-2"
+                style={{ color: palette.muted }}
+              >
+                Passo {step}
+              </div>
+
+              {/* Título */}
+              <h3
+                className="font-display text-xl font-medium mb-3"
+                style={{ color: palette.ink }}
+              >
+                {title}
+              </h3>
+
+              {/* Descrição */}
+              <p className="text-sm leading-relaxed" style={{ color: palette.inkSoft }}>
+                {desc}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
       </section>
 
       {/* ── PREVIEW MAPA ── */}
