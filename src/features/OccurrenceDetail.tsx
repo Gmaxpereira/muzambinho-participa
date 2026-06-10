@@ -10,9 +10,9 @@ const categoryMeta = {
 }
 
 const statusMeta = {
-  'Em análise': { color: palette.muted, icon: Clock },
-  'Encaminhado': { color: palette.d2, icon: AlertCircle },
-  'Resolvido': { color: palette.primary, icon: CheckCircle2 },
+  'Em análise':  { bg: '#FEF3C7', text: '#B45309', icon: Clock },
+  'Encaminhado': { bg: '#DBEAFE', text: '#1D4ED8', icon: AlertCircle },
+  'Resolvido':   { bg: '#DCFCE7', text: '#15803D', icon: CheckCircle2 },
 }
 
 interface OccurrenceDetailProps {
@@ -47,7 +47,7 @@ export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps
           <CatIcon size={12} />
           {meta.label}
         </div>
-        <button onClick={onClose}>
+        <button onClick={onClose} aria-label="Fechar detalhe">
           <X size={16} style={{ color: palette.muted }} />
         </button>
       </div>
@@ -73,13 +73,24 @@ export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps
         <div className="text-xs" style={{ color: palette.muted }}>
           Reportado {occ.date}
         </div>
-        <div
-          className="text-xs font-medium flex items-center gap-1.5"
-          style={{ color: status.color }}
+        {/* Badge de status */}
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 4,
+            background: status.bg,
+            color: status.text,
+            borderRadius: 999,
+            padding: '3px 9px',
+            fontSize: 11,
+            fontWeight: 500,
+            whiteSpace: 'nowrap',
+          }}
         >
-          <StatusIcon size={12} />
+          <StatusIcon size={11} />
           {occ.status}
-        </div>
+        </span>
       </div>
 
       <button
