@@ -1,6 +1,7 @@
 import { Building2, GraduationCap, Users } from 'lucide-react'
 import { motion, type Variants } from 'motion/react'
 import { palette } from '@/lib/palette'
+import ArnsteinLadder from '@/features/ArnsteinLadder'
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -246,53 +247,15 @@ export default function SobrePage() {
           A Escada de Arnstein (1969)
         </h2>
         <p className="text-sm mb-8" style={{ color: palette.muted }}>
-          3 níveis em que a ferramenta opera, do acesso à informação à coprodução de dados.
+          8 degraus de participação, do controle institucional ao poder cidadão efetivo.
+          A plataforma opera nos níveis de <strong style={{ color: palette.primary }}>Informação</strong>,{' '}
+          <strong style={{ color: palette.primary }}>Consulta</strong> e{' '}
+          <strong style={{ color: palette.accent }}>Parceria</strong>.
         </p>
 
-        {/* SVG staircase */}
-        <svg
-          viewBox="0 0 420 210"
-          className="w-full mb-8"
-          style={{ maxHeight: 220 }}
-          aria-label="Escada de Arnstein com 3 degraus: Informação, Consulta, Colaboração"
-        >
-          {/* Degrau 1 — Informação (base) */}
-          <rect x="0" y="140" width="420" height="65" rx="3" fill={palette.inkSoft} fillOpacity="0.08" />
-          <rect x="0" y="140" width="3" height="65" fill={palette.muted} fillOpacity="0.6" />
-          <text x="18" y="167" fontFamily="var(--font-display)" fontSize="14" fill={palette.inkSoft} fontWeight="500">
-            Informação
-          </text>
-          <text x="18" y="186" fontFamily="var(--font-sans)" fontSize="11" fill={palette.muted}>
-            O cidadão recebe dados e indicadores urbanos.
-          </text>
+        <ArnsteinLadder />
 
-          {/* Degrau 2 — Consulta (meio) */}
-          <rect x="80" y="75" width="340" height="58" rx="3" fill={palette.primary} fillOpacity="0.10" />
-          <rect x="80" y="75" width="3" height="58" fill={palette.primary} fillOpacity="0.7" />
-          <text x="98" y="100" fontFamily="var(--font-display)" fontSize="14" fill={palette.primary} fontWeight="500">
-            Consulta
-          </text>
-          <text x="98" y="119" fontFamily="var(--font-sans)" fontSize="11" fill={palette.inkSoft}>
-            O cidadão opina e vota em decisões locais.
-          </text>
-
-          {/* Degrau 3 — Colaboração (topo) */}
-          <rect x="160" y="5" width="260" height="62" rx="3" fill={palette.accent} fillOpacity="0.12" />
-          <rect x="160" y="5" width="3" height="62" fill={palette.accent} fillOpacity="0.8" />
-          <text x="178" y="31" fontFamily="var(--font-display)" fontSize="14" fill={palette.accent} fontWeight="600">
-            Colaboração
-          </text>
-          <text x="178" y="50" fontFamily="var(--font-sans)" fontSize="11" fill={palette.inkSoft}>
-            O cidadão coproduz dados para o Plano Diretor.
-          </text>
-          {/* "ferramenta opera aqui" badge */}
-          <rect x="310" y="8" width="105" height="18" rx="9" fill={palette.accent} fillOpacity="0.2" />
-          <text x="363" y="21" textAnchor="middle" fontFamily="var(--font-mono)" fontSize="9" fill={palette.accent} letterSpacing="0.05em">
-            FERRAMENTA OPERA AQUI
-          </text>
-        </svg>
-
-        <p className="text-sm leading-relaxed" style={{ color: palette.inkSoft }}>
+        <p className="text-sm leading-relaxed mt-8" style={{ color: palette.inkSoft }}>
           Referência: ARNSTEIN, Sherry R. A Ladder of Citizen Participation.{' '}
           <em>Journal of the American Planning Association</em>, v. 35, n. 4, p. 216–224, 1969.
         </p>
