@@ -5,6 +5,7 @@ import type {
   Indicator,
   IndicatorEvolutionPoint,
   CategoryReport,
+  ChallengeProgressData,
 } from '@/types'
 
 const STORAGE_KEY = 'muzambinho_occurrences'
@@ -204,6 +205,43 @@ export async function getIndicatorEvolution(): Promise<IndicatorEvolutionPoint[]
     { mes: 'Abr', coleta: 74, esgoto: 44.0, drenagem: 53.9 },
     { mes: 'Mai', coleta: 75, esgoto: 45.2, drenagem: 54.5 },
     { mes: 'Jun', coleta: 76, esgoto: 46.8, drenagem: 55.1 },
+  ]
+}
+
+// D1/D3 counts are base (from non-report data) + registered occurrences,
+// making the bars grow as citizens submit new reports.
+const D1_BASE = 35  // 35 + 3 initial mocks = 38
+const D3_BASE = 49  // 49 + 3 initial mocks = 52
+
+export async function getChallengeProgress(): Promise<ChallengeProgressData[]> {
+  const occurrences = await getOccurrences()
+  const d1Count = D1_BASE + occurrences.filter(o => o.type === 'd1').length
+  const d3Count = D3_BASE + occurrences.filter(o => o.type === 'd3').length
+  return [
+    {
+      category: 'd1',
+      current: d1Count,
+      total: 100,
+      unit: 'pontos',
+      motivational: 'Ajude a mapear os pontos sem coleta nas comunidades rurais.',
+      miniGoal: 'Próxima meta: 50 pontos → relatório para a Prefeitura',
+    },
+    {
+      category: 'd2',
+      current: 46.8,
+      total: 80,
+      unit: '%',
+      motivational: 'Acompanhe o avanço das obras do Sistema de Esgotamento Sanitário.',
+      miniGoal: 'Obra atual: interceptor da Av. Principal — 62% concluído',
+    },
+    {
+      category: 'd3',
+      current: d3Count,
+      total: 120,
+      unit: 'pontos',
+      motivational: 'Seus registros estão construindo o primeiro mapa de risco do município.',
+      miniGoal: 'Próxima meta: 80 pontos → base para o Plano Diretor de Drenagem',
+    },
   ]
 }
 

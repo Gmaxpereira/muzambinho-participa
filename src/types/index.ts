@@ -68,3 +68,12 @@ export interface CategoryReport {
   value: number
   color: string
 }
+
+export interface ChallengeProgressData {
+  category: Category
+  current: number
+  total: number
+  unit: 'pontos' | '%'
+  motivational: string
+  miniGoal: string
+}

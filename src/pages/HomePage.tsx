@@ -4,6 +4,7 @@ import { Trash2, Droplets, CloudRain, ChevronRight, Camera, MapPin, TrendingUp }
 import Stat from '@/features/Stat'
 import ChallengeCard from '@/features/ChallengeCard'
 import KPICard from '@/features/KPICard'
+import ChallengeProgressSection from '@/features/ChallengeProgressSection'
 import { palette } from '@/lib/palette'
 
 const fadeUp: Variants = {
@@ -258,6 +259,9 @@ export default function HomePage() {
           ))}
         </motion.div>
       </section>
+
+      {/* ── PROGRESSO DOS DESAFIOS ── */}
+      <ChallengeProgressSection />
 
       {/* ── PREVIEW MAPA ── */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
