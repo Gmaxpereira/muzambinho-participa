@@ -11,14 +11,84 @@ const STORAGE_KEY = 'muzambinho_occurrences'
 const SUPPORTED_KEY = 'muzambinho_supported_ids'
 
 const initialOccurrences: Occurrence[] = [
-  { id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café',   neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias',    status: 'Em análise',  supporters: 18, lat: -21.380, lng: -46.550, x: 22, y: 35 },
-  { id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas',       neighborhood: 'Comunidade Boa Esperança',    date: 'há 5 dias',    status: 'Encaminhado', supporters:  7, lat: -21.360, lng: -46.508, x: 78, y: 28 },
-  { id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias',   neighborhood: 'Centro',                      date: 'há 1 dia',     status: 'Em análise',  supporters: 23, lat: -21.370, lng: -46.527, x: 48, y: 55 },
-  { id: 4, type: 'd2', title: 'Vazamento próximo à ETE',                  neighborhood: 'Bairro São José',             date: 'há 4 dias',    status: 'Resolvido',   supporters:  4, lat: -21.375, lng: -46.522, x: 56, y: 62 },
-  { id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz', neighborhood: 'Centro',                      date: 'ontem',        status: 'Em análise',  supporters: 15, lat: -21.372, lng: -46.528, x: 45, y: 50 },
-  { id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro',      neighborhood: 'Vila Olímpica',               date: 'há 3 dias',    status: 'Encaminhado', supporters: 11, lat: -21.368, lng: -46.535, x: 38, y: 68 },
-  { id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal',        neighborhood: 'Zona Rural — Pântano',        date: 'há 1 semana',  status: 'Em análise',  supporters:  3, lat: -21.400, lng: -46.560, x: 18, y: 72 },
-  { id: 8, type: 'd1', title: 'Lixeira comunitária quebrada',             neighborhood: 'Bairro do Rosário',           date: 'há 6 dias',    status: 'Resolvido',   supporters:  9, lat: -21.365, lng: -46.520, x: 52, y: 45 },
+  {
+    id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café',
+    neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias', status: 'Em análise', supporters: 18,
+    lat: -21.380, lng: -46.550, x: 22, y: 35,
+    timeline: [
+      { type: 'supported',   label: '18 moradores apoiaram',              date: 'há 1 dia'  },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 2 dias' },
+    ],
+  },
+  {
+    id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas',
+    neighborhood: 'Comunidade Boa Esperança', date: 'há 5 dias', status: 'Encaminhado', supporters: 7,
+    lat: -21.360, lng: -46.508, x: 78, y: 28,
+    timeline: [
+      { type: 'forwarded',   label: 'Encaminhado à Secretaria de Obras',  date: 'há 3 dias' },
+      { type: 'supported',   label: '7 moradores apoiaram',               date: 'há 4 dias' },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 5 dias' },
+    ],
+  },
+  {
+    id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias',
+    neighborhood: 'Centro', date: 'há 1 dia', status: 'Em análise', supporters: 23,
+    lat: -21.370, lng: -46.527, x: 48, y: 55,
+    timeline: [
+      { type: 'supported',   label: '23 moradores apoiaram',              date: 'há 8h'     },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 1 dia'  },
+    ],
+  },
+  {
+    id: 4, type: 'd2', title: 'Vazamento próximo à ETE',
+    neighborhood: 'Bairro São José', date: 'há 4 dias', status: 'Resolvido', supporters: 4,
+    lat: -21.375, lng: -46.522, x: 56, y: 62,
+    timeline: [
+      { type: 'resolved',    label: 'Resolvido — reparo na rede concluído', date: 'há 1 dia'  },
+      { type: 'visited',     label: 'Equipe técnica visitou o local',      date: 'há 2 dias' },
+      { type: 'forwarded',   label: 'Encaminhado à Secretaria de Obras',  date: 'há 3 dias' },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 4 dias' },
+    ],
+  },
+  {
+    id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz',
+    neighborhood: 'Centro', date: 'ontem', status: 'Em análise', supporters: 15,
+    lat: -21.372, lng: -46.528, x: 45, y: 50,
+    timeline: [
+      { type: 'supported',   label: '15 moradores apoiaram',              date: 'há 6h'     },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'ontem'     },
+    ],
+  },
+  {
+    id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro',
+    neighborhood: 'Vila Olímpica', date: 'há 3 dias', status: 'Encaminhado', supporters: 11,
+    lat: -21.368, lng: -46.535, x: 38, y: 68,
+    timeline: [
+      { type: 'forwarded',   label: 'Encaminhado à Secretaria de Infraestrutura', date: 'há 1 dia'  },
+      { type: 'supported',   label: '11 moradores apoiaram',              date: 'há 2 dias' },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 3 dias' },
+    ],
+  },
+  {
+    id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal',
+    neighborhood: 'Zona Rural — Pântano', date: 'há 1 semana', status: 'Em análise', supporters: 3,
+    lat: -21.400, lng: -46.560, x: 18, y: 72,
+    timeline: [
+      { type: 'supported',   label: '3 moradores apoiaram',               date: 'há 5 dias' },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 1 semana' },
+    ],
+  },
+  {
+    id: 8, type: 'd1', title: 'Lixeira comunitária quebrada',
+    neighborhood: 'Bairro do Rosário', date: 'há 6 dias', status: 'Resolvido', supporters: 9,
+    lat: -21.365, lng: -46.520, x: 52, y: 45,
+    timeline: [
+      { type: 'resolved',    label: 'Resolvido — lixeira substituída',    date: 'há 3 dias' },
+      { type: 'visited',     label: 'Equipe técnica visitou o local',     date: 'há 4 dias' },
+      { type: 'supported',   label: '9 moradores apoiaram',               date: 'há 5 dias' },
+      { type: 'registered',  label: 'Registrado pelo cidadão',            date: 'há 6 dias' },
+    ],
+  },
 ]
 
 const initialConsultations: Consultation[] = [
@@ -102,6 +172,9 @@ export async function createOccurrence(dto: CreateOccurrenceDto): Promise<Occurr
     date: 'agora',
     status: 'Em análise',
     supporters: 1,
+    timeline: [
+      { type: 'registered', label: 'Registrado pelo cidadão', date: 'agora' },
+    ],
     lat: coords.lat,
     lng: coords.lng,
     x: 20 + Math.random() * 60,

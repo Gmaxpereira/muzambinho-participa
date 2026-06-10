@@ -1,10 +1,18 @@
 import { useState } from 'react'
-import { X, Clock, AlertCircle, CheckCircle2, Heart } from 'lucide-react'
+import { X, Clock, AlertCircle, CheckCircle2, Heart, Send, ArrowRight, MapPin } from 'lucide-react'
 import { Trash2, Droplets, CloudRain } from 'lucide-react'
 import { toast } from 'sonner'
-import type { Occurrence } from '@/types'
+import type { Occurrence, TimelineEventType } from '@/types'
 import { supportOccurrence, getSupportedIds } from '@/mocks'
 import { palette } from '@/lib/palette'
+
+const timelineMeta: Record<TimelineEventType, { icon: React.ElementType; color: string }> = {
+  registered: { icon: Send,          color: palette.muted },
+  supported:  { icon: Heart,         color: '#B8893C'     },
+  forwarded:  { icon: ArrowRight,    color: '#2E5B7E'     },
+  visited:    { icon: MapPin,        color: palette.primary },
+  resolved:   { icon: CheckCircle2,  color: '#15803D'     },
+}
 
 const categoryMeta = {
   d1: { label: 'Resíduos Sólidos (D1)', color: palette.d1, icon: Trash2 },
@@ -139,6 +147,76 @@ export default function OccurrenceDetail({ occ, onClose, onSupport }: Occurrence
             : `Apoiar ocorrência · ${count} apoio${count !== 1 ? 's' : ''}`
         }
       </button>
+
+      {/* Timeline */}
+      {occ.timeline && occ.timeline.length > 0 && (
+        <div style={{ marginTop: 20, paddingTop: 16, borderTop: `1px solid ${palette.line}` }}>
+          <div
+            className="font-mono text-[10px] tracking-[0.25em] uppercase mb-4"
+            style={{ color: palette.muted }}
+          >
+            Histórico
+          </div>
+
+          <div style={{ position: 'relative', paddingLeft: 20 }}>
+            {/* Linha vertical */}
+            <div
+              style={{
+                position: 'absolute',
+                left: 6,
+                top: 6,
+                bottom: 6,
+                width: 1,
+                background: palette.line,
+              }}
+            />
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {occ.timeline.map((event, i) => {
+                const { icon: Icon, color } = timelineMeta[event.type]
+                return (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    {/* Bolinha */}
+                    <div
+                      style={{
+                        width: 13,
+                        height: 13,
+                        borderRadius: '50%',
+                        background: color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        marginTop: 2,
+                        position: 'relative',
+                        zIndex: 1,
+                      }}
+                    >
+                      <Icon size={7} color="#fff" strokeWidth={2.5} />
+                    </div>
+
+                    {/* Texto */}
+                    <div>
+                      <div
+                        className="text-xs font-semibold leading-snug"
+                        style={{ color: palette.ink }}
+                      >
+                        {event.label}
+                      </div>
+                      <div
+                        className="font-mono"
+                        style={{ fontSize: 10, color: palette.muted, marginTop: 1 }}
+                      >
+                        {event.date}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

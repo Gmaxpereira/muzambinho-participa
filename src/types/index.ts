@@ -1,6 +1,13 @@
 export type Category = 'd1' | 'd2' | 'd3'
 export type CategoryFilter = Category | 'all'
 export type OccurrenceStatus = 'Em análise' | 'Encaminhado' | 'Resolvido'
+export type TimelineEventType = 'registered' | 'supported' | 'forwarded' | 'visited' | 'resolved'
+
+export interface TimelineEvent {
+  type: TimelineEventType
+  label: string
+  date: string
+}
 
 export interface Occurrence {
   id: number
@@ -10,6 +17,7 @@ export interface Occurrence {
   date: string
   status: OccurrenceStatus
   supporters: number
+  timeline?: TimelineEvent[]
   lat?: number
   lng?: number
   /** posição relativa no mapa mock (%) */
