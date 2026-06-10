@@ -34,6 +34,11 @@ export default function MapaPage() {
     [filter, occurrences],
   )
 
+  const sortedForList = useMemo(
+    () => [...filtered].sort((a, b) => (b.supporters ?? 0) - (a.supporters ?? 0)),
+    [filtered],
+  )
+
   function handleFilterChange(f: CategoryFilter) {
     setFilter(f)
     setSelectedPin(null)
@@ -49,6 +54,11 @@ export default function MapaPage() {
   function handleClose() {
     setSelectedPin(null)
     setFlyTarget(null)
+  }
+
+  function handleSupport(id: number, newCount: number) {
+    setOccurrences(prev => prev.map(o => o.id === id ? { ...o, supporters: newCount } : o))
+    setSelectedPin(prev => prev?.id === id ? { ...prev, supporters: newCount } : prev)
   }
 
   function handleCreated(occ: Occurrence) {
@@ -130,6 +140,7 @@ export default function MapaPage() {
                   <OccurrenceDetail
                     occ={selectedPin}
                     onClose={handleClose}
+                    onSupport={handleSupport}
                   />
                 </motion.div>
               ) : null}
@@ -193,7 +204,7 @@ export default function MapaPage() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {filtered.slice(0, 5).map(o => (
+                    {sortedForList.slice(0, 5).map(o => (
                       <OccurrenceRow key={o.id} occ={o} onClick={() => handlePinClick(o)} />
                     ))}
                   </div>

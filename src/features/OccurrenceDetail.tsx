@@ -1,11 +1,14 @@
-import { X, Clock, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
+import { X, Clock, AlertCircle, CheckCircle2, Heart } from 'lucide-react'
 import { Trash2, Droplets, CloudRain } from 'lucide-react'
+import { toast } from 'sonner'
 import type { Occurrence } from '@/types'
+import { supportOccurrence, getSupportedIds } from '@/mocks'
 import { palette } from '@/lib/palette'
 
 const categoryMeta = {
   d1: { label: 'Resíduos Sólidos (D1)', color: palette.d1, icon: Trash2 },
-  d2: { label: 'Esgoto e Água (D2)', color: palette.d2, icon: Droplets },
+  d2: { label: 'Esgoto e Água (D2)',    color: palette.d2, icon: Droplets },
   d3: { label: 'Drenagem Urbana (D3)', color: palette.d3, icon: CloudRain },
 }
 
@@ -18,13 +21,34 @@ const statusMeta = {
 interface OccurrenceDetailProps {
   occ: Occurrence
   onClose: () => void
+  onSupport?: (id: number, newCount: number) => void
 }
 
-export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps) {
+export default function OccurrenceDetail({ occ, onClose, onSupport }: OccurrenceDetailProps) {
   const meta = categoryMeta[occ.type]
   const status = statusMeta[occ.status]
   const CatIcon = meta.icon
   const StatusIcon = status.icon
+
+  const [supported, setSupported] = useState(() => getSupportedIds().includes(occ.id))
+  const [count, setCount] = useState(occ.supporters ?? 0)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSupport() {
+    if (supported || loading) return
+    setLoading(true)
+    try {
+      const newCount = await supportOccurrence(occ.id)
+      setCount(newCount)
+      setSupported(true)
+      onSupport?.(occ.id, newCount)
+      toast.success('Apoio registrado! Quanto mais apoios, maior a prioridade.')
+    } catch {
+      toast.error('Erro ao registrar apoio. Tente novamente.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="fade-in">
@@ -73,7 +97,6 @@ export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps
         <div className="text-xs" style={{ color: palette.muted }}>
           Reportado {occ.date}
         </div>
-        {/* Badge de status */}
         <span
           style={{
             display: 'inline-flex',
@@ -94,10 +117,27 @@ export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps
       </div>
 
       <button
-        className="w-full mt-4 py-2.5 rounded text-xs font-medium tracking-wider uppercase"
-        style={{ background: palette.ink, color: palette.surface }}
+        onClick={handleSupport}
+        disabled={supported || loading}
+        className="w-full mt-4 py-2.5 rounded text-xs font-medium tracking-wider uppercase flex items-center justify-center gap-2 transition"
+        style={{
+          background: supported ? palette.primary : palette.ink,
+          color: palette.surface,
+          cursor: supported ? 'default' : 'pointer',
+          opacity: loading ? 0.7 : 1,
+        }}
       >
-        Apoiar ocorrência
+        <Heart
+          size={13}
+          fill={supported ? 'currentColor' : 'none'}
+          style={{ flexShrink: 0 }}
+        />
+        {supported
+          ? `Você apoiou · ${count} apoio${count !== 1 ? 's' : ''}`
+          : loading
+            ? 'Registrando...'
+            : `Apoiar ocorrência · ${count} apoio${count !== 1 ? 's' : ''}`
+        }
       </button>
     </div>
   )

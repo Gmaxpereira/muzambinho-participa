@@ -37,7 +37,9 @@ const DEFAULT_CENTER: L.LatLngExpression = [-21.372, -46.528]
 const DEFAULT_ZOOM = 13
 
 function createPinIcon(occ: Occurrence, selected: boolean, isDark: boolean): L.DivIcon {
-  const size = selected ? 36 : 28
+  const popular = (occ.supporters ?? 0) >= 10
+  const baseSize = selected ? 36 : 28
+  const size = popular && !selected ? Math.round(baseSize * 1.2) : baseSize
   const outer = Math.ceil(size * Math.SQRT2) + 4
   const half = outer / 2
   const color = CATEGORY_COLORS[occ.type]

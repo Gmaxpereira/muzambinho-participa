@@ -9,6 +9,7 @@ export interface Occurrence {
   neighborhood: string
   date: string
   status: OccurrenceStatus
+  supporters: number
   lat?: number
   lng?: number
   /** posição relativa no mapa mock (%) */

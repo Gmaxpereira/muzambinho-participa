@@ -8,16 +8,17 @@ import type {
 } from '@/types'
 
 const STORAGE_KEY = 'muzambinho_occurrences'
+const SUPPORTED_KEY = 'muzambinho_supported_ids'
 
 const initialOccurrences: Occurrence[] = [
-  { id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café', neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias', status: 'Em análise', lat: -21.380, lng: -46.550, x: 22, y: 35 },
-  { id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas', neighborhood: 'Comunidade Boa Esperança', date: 'há 5 dias', status: 'Encaminhado', lat: -21.360, lng: -46.508, x: 78, y: 28 },
-  { id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias', neighborhood: 'Centro', date: 'há 1 dia', status: 'Em análise', lat: -21.370, lng: -46.527, x: 48, y: 55 },
-  { id: 4, type: 'd2', title: 'Vazamento próximo à ETE', neighborhood: 'Bairro São José', date: 'há 4 dias', status: 'Resolvido', lat: -21.375, lng: -46.522, x: 56, y: 62 },
-  { id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz', neighborhood: 'Centro', date: 'ontem', status: 'Em análise', lat: -21.372, lng: -46.528, x: 45, y: 50 },
-  { id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro', neighborhood: 'Vila Olímpica', date: 'há 3 dias', status: 'Encaminhado', lat: -21.368, lng: -46.535, x: 38, y: 68 },
-  { id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal', neighborhood: 'Zona Rural — Pântano', date: 'há 1 semana', status: 'Em análise', lat: -21.400, lng: -46.560, x: 18, y: 72 },
-  { id: 8, type: 'd1', title: 'Lixeira comunitária quebrada', neighborhood: 'Bairro do Rosário', date: 'há 6 dias', status: 'Resolvido', lat: -21.365, lng: -46.520, x: 52, y: 45 },
+  { id: 1, type: 'd1', title: 'Descarte irregular na estrada do Café',   neighborhood: 'Zona Rural — Córrego do Café', date: 'há 2 dias',    status: 'Em análise',  supporters: 18, lat: -21.380, lng: -46.550, x: 22, y: 35 },
+  { id: 2, type: 'd1', title: 'Comunidade sem coleta há 3 semanas',       neighborhood: 'Comunidade Boa Esperança',    date: 'há 5 dias',    status: 'Encaminhado', supporters:  7, lat: -21.360, lng: -46.508, x: 78, y: 28 },
+  { id: 3, type: 'd2', title: 'Esgoto a céu aberto na Rua das Acácias',   neighborhood: 'Centro',                      date: 'há 1 dia',     status: 'Em análise',  supporters: 23, lat: -21.370, lng: -46.527, x: 48, y: 55 },
+  { id: 4, type: 'd2', title: 'Vazamento próximo à ETE',                  neighborhood: 'Bairro São José',             date: 'há 4 dias',    status: 'Resolvido',   supporters:  4, lat: -21.375, lng: -46.522, x: 56, y: 62 },
+  { id: 5, type: 'd3', title: 'Alagamento recorrente na Av. Américo Luz', neighborhood: 'Centro',                      date: 'ontem',        status: 'Em análise',  supporters: 15, lat: -21.372, lng: -46.528, x: 45, y: 50 },
+  { id: 6, type: 'd3', title: 'Bueiro entupido — Rua João Pinheiro',      neighborhood: 'Vila Olímpica',               date: 'há 3 dias',    status: 'Encaminhado', supporters: 11, lat: -21.368, lng: -46.535, x: 38, y: 68 },
+  { id: 7, type: 'd3', title: 'Erosão pluvial na estrada vicinal',        neighborhood: 'Zona Rural — Pântano',        date: 'há 1 semana',  status: 'Em análise',  supporters:  3, lat: -21.400, lng: -46.560, x: 18, y: 72 },
+  { id: 8, type: 'd1', title: 'Lixeira comunitária quebrada',             neighborhood: 'Bairro do Rosário',           date: 'há 6 dias',    status: 'Resolvido',   supporters:  9, lat: -21.365, lng: -46.520, x: 52, y: 45 },
 ]
 
 const initialConsultations: Consultation[] = [
@@ -44,11 +45,38 @@ export async function getOccurrences(): Promise<Occurrence[]> {
   await randomDelay()
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) return JSON.parse(stored) as Occurrence[]
+    if (stored) {
+      const parsed = JSON.parse(stored) as Occurrence[]
+      // Backfill supporters for data stored before this field was added
+      return parsed.map(o => ({ ...o, supporters: o.supporters ?? 1 }))
+    }
   } catch {
     // fallback to initial data
   }
   return initialOccurrences
+}
+
+export function getSupportedIds(): number[] {
+  try {
+    const stored = localStorage.getItem(SUPPORTED_KEY)
+    return stored ? (JSON.parse(stored) as number[]) : []
+  } catch {
+    return []
+  }
+}
+
+export async function supportOccurrence(id: number): Promise<number> {
+  const occurrences = await getOccurrences()
+  const occ = occurrences.find(o => o.id === id)
+  if (!occ) throw new Error('Occurrence not found')
+  const newCount = (occ.supporters ?? 0) + 1
+  const updated = occurrences.map(o => o.id === id ? { ...o, supporters: newCount } : o)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  const supported = getSupportedIds()
+  if (!supported.includes(id)) {
+    localStorage.setItem(SUPPORTED_KEY, JSON.stringify([...supported, id]))
+  }
+  return newCount
 }
 
 const MUZAMBINHO_BBOX = { latMin: -21.42, latMax: -21.32, lngMin: -46.58, lngMax: -46.47 }
@@ -73,6 +101,7 @@ export async function createOccurrence(dto: CreateOccurrenceDto): Promise<Occurr
     neighborhood: dto.neighborhood,
     date: 'agora',
     status: 'Em análise',
+    supporters: 1,
     lat: coords.lat,
     lng: coords.lng,
     x: 20 + Math.random() * 60,

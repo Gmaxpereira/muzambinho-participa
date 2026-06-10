@@ -1,4 +1,4 @@
-import { ChevronRight, Clock, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { ChevronRight, Clock, AlertCircle, CheckCircle2, Heart } from 'lucide-react'
 import { Trash2, Droplets, CloudRain } from 'lucide-react'
 import type { Occurrence } from '@/types'
 import { palette } from '@/lib/palette'
@@ -69,6 +69,22 @@ export default function OccurrenceRow({ occ, onClick }: OccurrenceRowProps) {
           >
             <StatusIcon size={9} />
             {occ.status}
+          </span>
+
+          {/* Badge de apoios */}
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 3,
+              color: palette.muted,
+              fontSize: 10,
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
+            <Heart size={9} />
+            {occ.supporters ?? 0}
           </span>
         </div>
       </div>
