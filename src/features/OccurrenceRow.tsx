@@ -34,7 +34,7 @@ export default function OccurrenceRow({ occ, onClick }: OccurrenceRowProps) {
           width: 28,
           height: 28,
           borderRadius: '50%',
-          background: `${meta.color}18`,
+          background: meta.color,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -42,7 +42,7 @@ export default function OccurrenceRow({ occ, onClick }: OccurrenceRowProps) {
           marginTop: 2,
         }}
       >
-        <CatIcon size={13} style={{ color: meta.color }} />
+        <CatIcon size={13} style={{ color: '#fff' }} />
       </div>
 
       <div className="flex-1 min-w-0">

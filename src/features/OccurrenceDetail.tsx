@@ -31,8 +31,8 @@ export default function OccurrenceDetail({ occ, onClose }: OccurrenceDetailProps
       <div className="flex items-start justify-between mb-4">
         <div
           style={{
-            background: `${meta.color}1A`,
-            color: meta.color,
+            background: meta.color,
+            color: '#fff',
             padding: '4px 10px',
             borderRadius: 4,
             fontSize: 10,
