@@ -104,26 +104,26 @@ export default function MyParticipationPanel({ open, onClose }: Props) {
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mb-5">
-            {stats.map(({ label, value, icon: Icon, color: c }) => (
+            {stats.map(({ label, value, icon: Icon }) => (
               <div
                 key={label}
-                className="flex flex-col items-center text-center py-4 px-2"
+                className="flex flex-col items-center text-center py-5 px-2"
                 style={{
-                  background: palette.paper,
-                  border: `1px solid ${palette.line}`,
+                  background: palette.accent,
+                  border: `2px solid #fff`,
                   borderRadius: 4,
                 }}
               >
-                <Icon size={14} style={{ color: c, marginBottom: 8, flexShrink: 0 }} />
+                <Icon size={26} style={{ color: '#fff', marginBottom: 10, flexShrink: 0 }} />
                 <div
                   className="font-display font-medium"
-                  style={{ fontSize: 36, lineHeight: 1, color: palette.ink }}
+                  style={{ fontSize: 38, lineHeight: 1, color: '#fff' }}
                 >
                   {value}
                 </div>
                 <div
-                  className="font-mono mt-2 whitespace-pre-line text-center"
-                  style={{ fontSize: 9, color: palette.muted, textTransform: 'uppercase', letterSpacing: '0.1em', lineHeight: 1.4 }}
+                  className="font-mono mt-2 whitespace-pre-line text-center font-bold"
+                  style={{ fontSize: 11, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.08em', lineHeight: 1.4 }}
                 >
                   {label}
                 </div>
@@ -147,8 +147,8 @@ export default function MyParticipationPanel({ open, onClose }: Props) {
           {myOccCount > 0 && (
             <div>
               <div
-                className="font-mono text-[10px] tracking-widest uppercase mb-3"
-                style={{ color: palette.muted }}
+                className="font-mono text-sm tracking-wider uppercase mb-3 font-bold"
+                style={{ color: palette.accent }}
               >
                 Minhas últimas ocorrências
               </div>
@@ -172,30 +172,33 @@ export default function MyParticipationPanel({ open, onClose }: Props) {
                       className="flex items-center justify-between p-3 rounded no-underline group transition hover:opacity-80"
                       style={{
                         background: palette.paper,
+                        borderLeft: `4px solid ${categoryColor[occ.type]}`,
                         border: `1px solid ${palette.line}`,
+                        borderLeftWidth: 4,
+                        borderLeftColor: categoryColor[occ.type],
                       }}
                     >
                       <div className="min-w-0 flex-1">
                         <div
-                          className="text-sm font-medium truncate"
+                          className="text-base font-semibold truncate"
                           style={{ color: palette.ink }}
                         >
                           {occ.title}
                         </div>
-                        <div className="flex items-center gap-2 mt-0.5">
+                        <div className="flex items-center gap-2 mt-1">
                           <span
-                            className="font-mono"
-                            style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: categoryColor[occ.type] }}
+                            className="font-mono font-bold"
+                            style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: categoryColor[occ.type] }}
                           >
                             {categoryLabel[occ.type]}
                           </span>
-                          <span style={{ fontSize: 11, color: palette.muted }}>
+                          <span style={{ fontSize: 13, color: palette.muted }}>
                             {occ.neighborhood} · {occ.date}
                           </span>
                         </div>
                       </div>
                       <ArrowRight
-                        size={13}
+                        size={15}
                         style={{ color: palette.muted, flexShrink: 0, marginLeft: 8 }}
                       />
                     </Link>
