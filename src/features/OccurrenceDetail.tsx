@@ -152,20 +152,20 @@ export default function OccurrenceDetail({ occ, onClose, onSupport }: Occurrence
       {occ.timeline && occ.timeline.length > 0 && (
         <div style={{ marginTop: 20, paddingTop: 16, borderTop: `1px solid ${palette.line}` }}>
           <div
-            className="font-mono text-sm tracking-wider uppercase mb-4 font-bold"
-            style={{ color: palette.accent }}
+            className="text-base tracking-wider uppercase mb-4 font-bold"
+            style={{ color: palette.accent, fontFamily: '"Poppins", sans-serif' }}
           >
             Histórico
           </div>
 
-          <div style={{ position: 'relative', paddingLeft: 28 }}>
+          <div style={{ position: 'relative', paddingLeft: 34 }}>
             {/* Linha vertical */}
             <div
               style={{
                 position: 'absolute',
-                left: 9,
-                top: 9,
-                bottom: 9,
+                left: 12,
+                top: 12,
+                bottom: 12,
                 width: 1,
                 background: palette.line,
               }}
@@ -179,8 +179,8 @@ export default function OccurrenceDetail({ occ, onClose, onSupport }: Occurrence
                     {/* Bolinha */}
                     <div
                       style={{
-                        width: 20,
-                        height: 20,
+                        width: 24,
+                        height: 24,
                         borderRadius: '50%',
                         background: color,
                         display: 'flex',
@@ -192,19 +192,19 @@ export default function OccurrenceDetail({ occ, onClose, onSupport }: Occurrence
                         zIndex: 1,
                       }}
                     >
-                      <Icon size={11} color="#fff" strokeWidth={2.5} />
+                      <Icon size={13} color="#fff" strokeWidth={2.5} />
                     </div>
 
                     {/* Texto */}
                     <div>
                       <div
-                        className="text-sm font-semibold leading-snug"
+                        className="text-base font-semibold leading-snug"
                         style={{ color: palette.ink }}
                       >
                         {event.label}
                       </div>
                       <div
-                        className="font-mono text-xs"
+                        className="font-mono text-sm"
                         style={{ color: palette.muted, marginTop: 2 }}
                       >
                         {event.date}

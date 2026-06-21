@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/fraunces": "^5.2.9",
+    "@fontsource/poppins": "^5.2.7",
     "@radix-ui/react-dialog": "^1.1.16",
     "@radix-ui/react-label": "^2.1.9",
     "@radix-ui/react-slot": "^1.2.5",
