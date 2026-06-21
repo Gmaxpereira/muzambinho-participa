@@ -88,6 +88,7 @@ export default function Header() {
               background: 'transparent',
               border: '1px solid var(--color-line)',
               color: 'var(--color-ink-soft)',
+              cursor: 'pointer',
             }}
             title="Minha participação"
           >
@@ -101,6 +102,7 @@ export default function Header() {
             style={{
               border: '1px solid var(--color-line)',
               color: 'var(--color-ink-soft)',
+              cursor: 'pointer',
             }}
             aria-label="Minha participação"
           >
@@ -109,7 +111,7 @@ export default function Header() {
 
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ background: 'var(--color-accent)', color: 'var(--color-surface)' }}
+            style={{ background: 'var(--color-accent)', color: 'var(--color-surface)', cursor: 'pointer' }}
             onClick={() => openRegister()}
           >
             <Send size={14} />

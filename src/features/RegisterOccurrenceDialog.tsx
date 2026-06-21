@@ -76,7 +76,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
           <div className="flex items-start justify-between mb-6">
             <div>
               <div
-                className="font-mono text-[10px] tracking-widest uppercase mb-2"
+                className="font-mono text-xs tracking-wider uppercase mb-2 font-bold"
                 style={{ color: palette.accent }}
               >
                 Nova ocorrência
@@ -88,7 +88,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
                 Descreva o que você viu
               </Dialog.Title>
             </div>
-            <Dialog.Close aria-label="Fechar formulário">
+            <Dialog.Close aria-label="Fechar formulário" style={{ cursor: 'pointer' }}>
               <X size={18} style={{ color: palette.muted }} />
             </Dialog.Close>
           </div>
@@ -96,8 +96,8 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
           {/* Categoria */}
           <div className="mb-5">
             <label
-              className="font-mono text-[10px] tracking-widest uppercase block mb-2"
-              style={{ color: palette.muted }}
+              className="font-mono text-sm tracking-wider uppercase block mb-2 font-bold"
+              style={{ color: palette.accent }}
             >
               Categoria
             </label>
@@ -114,6 +114,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
                       background: active ? m.color : 'transparent',
                       color: active ? palette.surface : palette.inkSoft,
                       border: `1px solid ${active ? m.color : palette.line}`,
+                      cursor: 'pointer',
                     }}
                   >
                     <Icon size={16} />
@@ -127,8 +128,8 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
           {/* Descrição */}
           <div className="mb-4">
             <label
-              className="font-mono text-[10px] tracking-widest uppercase block mb-2"
-              style={{ color: palette.muted }}
+              className="font-mono text-sm tracking-wider uppercase block mb-2 font-bold"
+              style={{ color: palette.accent }}
             >
               Descrição breve
             </label>
@@ -148,8 +149,8 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
           {/* Bairro */}
           <div className="mb-5">
             <label
-              className="font-mono text-[10px] tracking-widest uppercase block mb-2"
-              style={{ color: palette.muted }}
+              className="font-mono text-sm tracking-wider uppercase block mb-2 font-bold"
+              style={{ color: palette.accent }}
             >
               Bairro ou comunidade
             </label>
@@ -186,7 +187,7 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
             onClick={handleSubmit}
             disabled={loading || !title.trim() || !neighborhood.trim()}
             className="w-full py-3 rounded text-sm font-medium tracking-wider uppercase transition hover:opacity-90 flex items-center justify-center gap-2 disabled:opacity-50"
-            style={{ background: palette.accent, color: palette.surface }}
+            style={{ background: palette.accent, color: palette.surface, cursor: 'pointer' }}
           >
             <Send size={14} />
             {loading ? 'Localizando...' : 'Enviar ocorrência'}
