@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { MapPin, Send, Menu, X } from 'lucide-react'
+import { MapPin, Send, Menu, X, User } from 'lucide-react'
 import { useRegisterOccurrence } from '@/contexts/RegisterOccurrenceContext'
+import MyParticipationPanel from '@/features/MyParticipationPanel'
 
 const navLinks = [
   { label: 'Mapa', to: '/mapa' },
@@ -12,6 +13,7 @@ const navLinks = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(false)
   const { pathname } = useLocation()
   const { openRegister } = useRegisterOccurrence()
 
@@ -78,6 +80,33 @@ export default function Header() {
 
         {/* Right side */}
         <div className="flex items-center gap-3">
+          {/* Minha participação */}
+          <button
+            onClick={() => setPanelOpen(true)}
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-80"
+            style={{
+              background: 'transparent',
+              border: '1px solid var(--color-line)',
+              color: 'var(--color-ink-soft)',
+            }}
+            title="Minha participação"
+          >
+            <User size={14} />
+            <span>Minha participação</span>
+          </button>
+          {/* Ícone apenas em mobile */}
+          <button
+            onClick={() => setPanelOpen(true)}
+            className="md:hidden flex items-center justify-center p-2 rounded-full transition-opacity hover:opacity-80"
+            style={{
+              border: '1px solid var(--color-line)',
+              color: 'var(--color-ink-soft)',
+            }}
+            aria-label="Minha participação"
+          >
+            <User size={16} />
+          </button>
+
           <button
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-90"
             style={{ background: 'var(--color-accent)', color: 'var(--color-surface)' }}
@@ -126,8 +155,17 @@ export default function Header() {
               </Link>
             )
           })}
+          <button
+            className="text-base font-medium text-left hover:opacity-70 transition-opacity"
+            style={{ color: 'var(--color-ink-soft)' }}
+            onClick={() => { setMenuOpen(false); setPanelOpen(true) }}
+          >
+            Minha participação
+          </button>
         </nav>
       )}
+
+      <MyParticipationPanel open={panelOpen} onClose={() => setPanelOpen(false)} />
     </header>
   )
 }

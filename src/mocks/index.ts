@@ -10,6 +10,7 @@ import type {
 
 const STORAGE_KEY = 'muzambinho_occurrences'
 const SUPPORTED_KEY = 'muzambinho_supported_ids'
+const MY_OCCURRENCES_KEY = 'muzambinho_my_occurrence_ids'
 
 const initialOccurrences: Occurrence[] = [
   {
@@ -136,6 +137,15 @@ export function getSupportedIds(): number[] {
   }
 }
 
+export function getMyOccurrenceIds(): number[] {
+  try {
+    const stored = localStorage.getItem(MY_OCCURRENCES_KEY)
+    return stored ? (JSON.parse(stored) as number[]) : []
+  } catch {
+    return []
+  }
+}
+
 export async function supportOccurrence(id: number): Promise<number> {
   const occurrences = await getOccurrences()
   const occ = occurrences.find(o => o.id === id)
@@ -183,6 +193,7 @@ export async function createOccurrence(dto: CreateOccurrenceDto): Promise<Occurr
   }
   const updated = [newOccurrence, ...current]
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+  localStorage.setItem(MY_OCCURRENCES_KEY, JSON.stringify([newOccurrence.id, ...getMyOccurrenceIds()]))
   return newOccurrence
 }
 
