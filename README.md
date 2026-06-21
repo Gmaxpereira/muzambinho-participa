@@ -24,21 +24,39 @@ Projeto desenvolvido como **Etapa 4** da disciplina de **Cidades Inteligentes** 
 | **D2** | **Esgotamento Sanitário** — apenas 42,6% de cobertura e 100% do esgoto lançado in natura | ISO 37120:20.1 — Cobertura de esgoto (46,8%) |
 | **D3** | **Drenagem Urbana** — 47,2% de déficit em rede pluvial e ausência de mapa de risco | ISO 37123:13.3 — Pontos de alagamento mapeados (52) |
 
+## Funcionalidades
+
+| Funcionalidade | Descrição |
+|---|---|
+| **Mapa colaborativo** | Pins georreferenciados por categoria (D1/D2/D3), filtro por tipo, flyTo animado ao clicar |
+| **Heatmap de ocorrências** | Toggle Layers alterna entre pins e mapa de calor (leaflet.heat), intensidade proporcional aos apoios |
+| **Registro de ocorrências** | Formulário com geolocalização, confetti + toast de confirmação, persistência em localStorage |
+| **Sistema de apoio** | Botão "Apoiar ocorrência" com contador, anti-duplo-apoio por localStorage, ordenação por popularidade |
+| **Timeline de histórico** | Cada ocorrência exibe linha do tempo com eventos (registro, apoios, encaminhamento, resolução) |
+| **Painel ISO** | KPIs animados (count-up), gráfico de evolução temporal, pizza por categoria, exportação CSV |
+| **Progresso dos desafios** | Barras animadas D1/D2/D3 com valores dinâmicos (contagem real de ocorrências + base fixa) |
+| **Consultas públicas** | Votação com rádio customizado, resultados em tempo real, persistência localStorage |
+| **Minha participação** | Painel anônimo (sem login) com contadores de ocorrências, apoios e votos dados neste navegador |
+| **Escada de Arnstein** | Visualização interativa dos 8 degraus, destacando os níveis em que a plataforma opera |
+| **Animações** | `whileInView` + stagger (motion.dev), count-up nos KPIs via IntersectionObserver + rAF |
+
 ## Stack
 
 | Tecnologia | Versão | Papel |
 |---|---|---|
 | Vite | 6.x | Bundler + dev server |
-| React | 19.x | UI framework |
+| React | 18.x | UI framework |
 | TypeScript | 5.x | Tipagem estática (strict) |
 | Tailwind CSS | 4.x | Utilitários CSS + `@theme` customizado |
 | react-router-dom | 7.x | Roteamento SPA |
 | react-leaflet + leaflet | 5.x / 1.9.x | Mapa colaborativo |
+| leaflet.heat | latest | Heatmap de concentração de ocorrências |
 | recharts | 3.x | Gráficos (LineChart, PieChart) |
 | motion | 11.x | Animações de entrada (`whileInView`, stagger) |
 | sonner | latest | Toast notifications |
+| canvas-confetti | latest | Burst de confetti ao registrar ocorrência |
 | lucide-react | latest | Ícones |
-| Fraunces + DM Sans | latest | Fontes (display + corpo) |
+| Fraunces + DM Sans + Poppins | latest | Fontes (display + corpo + títulos especiais) |
 
 ## Decisões Arquiteturais
 
@@ -48,9 +66,10 @@ Toda a camada de dados está encapsulada em `src/mocks/`. As funções retornam 
 
 ```
 src/mocks/
-├── index.ts          → getOccurrences(), createOccurrence()
-├── consultations.ts  → getConsultations(), saveVote(), getVotes()
-└── indicators.ts     → getKPIs(), getIndicatorEvolution(), getReportsByCategory()
+├── index.ts          → getOccurrences(), createOccurrence(), supportOccurrence()
+│                        getSupportedIds(), getMyOccurrenceIds(), getChallengeProgress()
+│                        getIndicators(), getIndicatorEvolution(), getReportsByCategory()
+└── consultations.ts  → getConsultations(), saveVote(), getVotes()
 ```
 
 Para migrar para Supabase em produção, basta substituir cada função por uma chamada `supabase.from(...)` — **nenhum componente precisa mudar**.
@@ -90,14 +109,18 @@ npm run preview # serve o build localmente
 
 ```
 src/
-├── components/        # Reutilizáveis: Header, Footer, Layout
-│   └── ui/            # Componentes base (Skeleton)
-├── pages/             # Uma por rota: Home, Mapa, Painel, Consultas, Sobre, 404
-├── features/          # Domínio: MapView, KPICard, OccurrenceRow, VoteDialog…
+├── components/        # Reutilizáveis: Header (com "Minha participação"), Footer, Layout
+│   └── ui/            # Skeleton
+├── contexts/          # RegisterOccurrenceContext — dialog global + confetti/toast
+├── pages/             # Home, Mapa, Painel, Consultas, Sobre, NotFound
+├── features/          # MapView (heatmap), OccurrenceDetail (timeline), OccurrenceRow,
+│                      # ChallengeProgressSection, MyParticipationPanel, VoteDialog,
+│                      # ArnsteinLadder, KPICard, ISOTable, Stat…
+├── hooks/             # useCountUp — animação count-up com IntersectionObserver
 ├── mocks/             # Serviços async com localStorage (substituível por Supabase)
-├── types/             # index.ts — interfaces TypeScript
+├── types/             # index.ts — interfaces TypeScript (Occurrence, TimelineEvent…)
 ├── lib/               # utils.ts (cn), palette.ts (tokens de cor)
-└── styles/            # globals.css — @theme + fontes + keyframes
+└── styles/            # globals.css — @theme + fontes + keyframes (mp-ring-pulse)
 ```
 
 ## Fluxo de contribuição
