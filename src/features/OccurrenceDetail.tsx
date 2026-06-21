@@ -152,60 +152,60 @@ export default function OccurrenceDetail({ occ, onClose, onSupport }: Occurrence
       {occ.timeline && occ.timeline.length > 0 && (
         <div style={{ marginTop: 20, paddingTop: 16, borderTop: `1px solid ${palette.line}` }}>
           <div
-            className="font-mono text-[10px] tracking-[0.25em] uppercase mb-4"
-            style={{ color: palette.muted }}
+            className="font-mono text-sm tracking-wider uppercase mb-4 font-bold"
+            style={{ color: palette.accent }}
           >
             Histórico
           </div>
 
-          <div style={{ position: 'relative', paddingLeft: 20 }}>
+          <div style={{ position: 'relative', paddingLeft: 28 }}>
             {/* Linha vertical */}
             <div
               style={{
                 position: 'absolute',
-                left: 6,
-                top: 6,
-                bottom: 6,
+                left: 9,
+                top: 9,
+                bottom: 9,
                 width: 1,
                 background: palette.line,
               }}
             />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {occ.timeline.map((event, i) => {
                 const { icon: Icon, color } = timelineMeta[event.type]
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                     {/* Bolinha */}
                     <div
                       style={{
-                        width: 13,
-                        height: 13,
+                        width: 20,
+                        height: 20,
                         borderRadius: '50%',
                         background: color,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        marginTop: 2,
+                        marginTop: 1,
                         position: 'relative',
                         zIndex: 1,
                       }}
                     >
-                      <Icon size={7} color="#fff" strokeWidth={2.5} />
+                      <Icon size={11} color="#fff" strokeWidth={2.5} />
                     </div>
 
                     {/* Texto */}
                     <div>
                       <div
-                        className="text-xs font-semibold leading-snug"
+                        className="text-sm font-semibold leading-snug"
                         style={{ color: palette.ink }}
                       >
                         {event.label}
                       </div>
                       <div
-                        className="font-mono"
-                        style={{ fontSize: 10, color: palette.muted, marginTop: 1 }}
+                        className="font-mono text-xs"
+                        style={{ color: palette.muted, marginTop: 2 }}
                       >
                         {event.date}
                       </div>
