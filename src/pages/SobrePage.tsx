@@ -75,6 +75,8 @@ const divider = (
   <div style={{ height: 1, background: palette.line, margin: '60px 0' }} />
 )
 
+const sectionLabelClass = 'font-mono text-base tracking-[0.25em] uppercase mb-3 font-bold'
+
 export default function SobrePage() {
   return (
     <article className="max-w-3xl mx-auto px-6 lg:px-0 py-20">
@@ -110,10 +112,7 @@ export default function SobrePage() {
 
       {/* ── Os 3 Desafios ── */}
       <section className="mb-14">
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Diagnóstico — Etapa 2
         </div>
         <h2
@@ -148,18 +147,18 @@ export default function SobrePage() {
               >
                 {c.code}
               </div>
-              <div className="font-medium mb-3" style={{ color: palette.ink }}>
+              <div className="font-medium text-base mb-3" style={{ color: palette.ink }}>
                 {c.title}
               </div>
               <ul className="space-y-1">
                 {c.stats.map(s => (
-                  <li key={s} className="text-xs leading-snug" style={{ color: palette.inkSoft }}>
+                  <li key={s} className="text-sm leading-snug" style={{ color: palette.inkSoft }}>
                     · {s}
                   </li>
                 ))}
               </ul>
               <div
-                className="font-mono text-[10px] mt-3 tracking-wider"
+                className="font-mono text-xs mt-3 tracking-wider"
                 style={{ color: c.color, opacity: 0.8 }}
               >
                 {c.iso}
@@ -173,10 +172,7 @@ export default function SobrePage() {
 
       {/* ── Como funciona ── */}
       <section className="mb-14">
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Metodologia
         </div>
         <h2
@@ -189,18 +185,18 @@ export default function SobrePage() {
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
             <div
-              className="font-mono text-[10px] tracking-widest uppercase mb-3"
+              className="font-mono text-[13px] tracking-widest uppercase mb-3 font-semibold"
               style={{ color: palette.accent }}
             >
               Componente digital
             </div>
             <h3
-              className="font-display text-lg font-medium mb-3"
+              className="font-display text-xl font-medium mb-3"
               style={{ color: palette.ink }}
             >
               Plataforma web
             </h3>
-            <ul className="space-y-2 text-sm" style={{ color: palette.inkSoft }}>
+            <ul className="space-y-2 text-base" style={{ color: palette.inkSoft }}>
               <li>— Mapa colaborativo de ocorrências urbanas georreferenciadas</li>
               <li>— Painel de indicadores ISO em tempo real</li>
               <li>— Consultas públicas com votação e persistência</li>
@@ -209,18 +205,18 @@ export default function SobrePage() {
           </div>
           <div>
             <div
-              className="font-mono text-[10px] tracking-widest uppercase mb-3"
+              className="font-mono text-[13px] tracking-widest uppercase mb-3 font-semibold"
               style={{ color: palette.primary }}
             >
               Componente presencial
             </div>
             <h3
-              className="font-display text-lg font-medium mb-3"
+              className="font-display text-xl font-medium mb-3"
               style={{ color: palette.ink }}
             >
               Oficinas de cartografia social
             </h3>
-            <ul className="space-y-2 text-sm" style={{ color: palette.inkSoft }}>
+            <ul className="space-y-2 text-base" style={{ color: palette.inkSoft }}>
               <li>— Encontros com comunidades em território</li>
               <li>— Coleta qualitativa de dados de percepção de risco</li>
               <li>— Mapeamento participativo que complementa os registros digitais</li>
@@ -234,10 +230,7 @@ export default function SobrePage() {
 
       {/* ── Escada de Arnstein ── */}
       <section className="mb-14">
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Fundamentação teórica
         </div>
         <h2
@@ -246,7 +239,7 @@ export default function SobrePage() {
         >
           A Escada de Arnstein (1969)
         </h2>
-        <p className="text-sm mb-8" style={{ color: palette.muted }}>
+        <p className="text-base mb-8" style={{ color: palette.muted }}>
           8 degraus de participação, do controle institucional ao poder cidadão efetivo.
           A plataforma opera nos níveis de <strong style={{ color: palette.primary }}>Informação</strong>,{' '}
           <strong style={{ color: palette.primary }}>Consulta</strong> e{' '}
@@ -255,7 +248,7 @@ export default function SobrePage() {
 
         <ArnsteinLadder />
 
-        <p className="text-sm leading-relaxed mt-8" style={{ color: palette.inkSoft }}>
+        <p className="text-base leading-relaxed mt-8" style={{ color: palette.inkSoft }}>
           Referência: ARNSTEIN, Sherry R. A Ladder of Citizen Participation.{' '}
           <em>Journal of the American Planning Association</em>, v. 35, n. 4, p. 216–224, 1969.
         </p>
@@ -265,10 +258,7 @@ export default function SobrePage() {
 
       {/* ── Arranjo Institucional ── */}
       <section className="mb-14">
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Governança
         </div>
         <h2
@@ -309,10 +299,10 @@ export default function SobrePage() {
                 <div className="font-display text-lg font-medium mb-0.5" style={{ color: palette.ink }}>
                   {actor.title}
                 </div>
-                <div className="font-mono text-[10px] tracking-wider uppercase mb-3" style={{ color: palette.muted }}>
+                <div className="font-mono text-[13px] tracking-wider uppercase mb-3" style={{ color: palette.muted }}>
                   {actor.subtitle}
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: palette.inkSoft }}>
+                <p className="text-base leading-relaxed" style={{ color: palette.inkSoft }}>
                   {actor.desc}
                 </p>
               </div>
@@ -325,10 +315,7 @@ export default function SobrePage() {
 
       {/* ── Base Normativa ── */}
       <section className="mb-14">
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Referências normativas
         </div>
         <h2
@@ -338,7 +325,7 @@ export default function SobrePage() {
           Base normativa
         </h2>
 
-        <ul className="space-y-4">
+        <ul className="space-y-5">
           {normativeBase.map(item => (
             <li key={item.norm} className="flex items-start gap-4">
               <span
@@ -347,15 +334,15 @@ export default function SobrePage() {
                   height: 6,
                   background: palette.accent,
                   borderRadius: '50%',
-                  marginTop: 7,
+                  marginTop: 9,
                   flexShrink: 0,
                 }}
               />
               <div>
-                <span className="font-mono text-xs font-medium" style={{ color: palette.ink }}>
+                <span className="font-mono text-sm font-semibold" style={{ color: palette.ink }}>
                   {item.norm}
                 </span>
-                <span className="text-sm ml-2" style={{ color: palette.muted }}>
+                <span className="text-base ml-2" style={{ color: palette.muted }}>
                   — {item.desc}
                 </span>
               </div>
@@ -368,10 +355,7 @@ export default function SobrePage() {
 
       {/* ── Equipe ── */}
       <section>
-        <div
-          className="font-mono text-xs tracking-[0.3em] uppercase mb-3"
-          style={{ color: palette.muted }}
-        >
+        <div className={sectionLabelClass} style={{ color: palette.accent }}>
           Autores
         </div>
         <h2
@@ -413,10 +397,10 @@ export default function SobrePage() {
                   {initial}
                 </div>
                 <div>
-                  <div className="font-medium text-sm" style={{ color: palette.ink }}>
+                  <div className="font-medium text-base" style={{ color: palette.ink }}>
                     {name}
                   </div>
-                  <div className="font-mono text-[10px] tracking-wider uppercase mt-0.5" style={{ color: palette.muted }}>
+                  <div className="font-mono text-[13px] tracking-wider uppercase mt-0.5" style={{ color: palette.muted }}>
                     Cidades Inteligentes · 2026
                   </div>
                 </div>
