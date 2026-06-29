@@ -54,6 +54,15 @@ export default function PainelPage() {
       .then(([k, e, r]) => { setKpis(k); setEvolution(e); setReports(r) })
   }, [])
 
+  useEffect(() => {
+    function refresh() {
+      Promise.all([getKPIs(), getReportsByCategory()])
+        .then(([k, r]) => { setKpis(k); setReports(r) })
+    }
+    window.addEventListener('muzambinho:occurrence-created', refresh)
+    return () => window.removeEventListener('muzambinho:occurrence-created', refresh)
+  }, [])
+
   const loading = kpis.length === 0
 
   return (
