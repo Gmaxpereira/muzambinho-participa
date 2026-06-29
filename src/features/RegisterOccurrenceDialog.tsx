@@ -35,9 +35,11 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
     if (!val) { reset(); onClose() }
   }
 
-  async function submitWithCoords(lat?: number, lng?: number) {
+  async function handleSubmit() {
+    if (!title.trim() || !neighborhood.trim()) return
+    setLoading(true)
     try {
-      const occ = await createOccurrence({ type, title, neighborhood, lat, lng })
+      const occ = await createOccurrence({ type, title, neighborhood })
       onCreated(occ)
       reset()
       onClose()
@@ -45,16 +47,6 @@ export default function RegisterOccurrenceDialog({ open, onClose, onCreated }: R
       toast.error('Erro ao registrar ocorrência. Tente novamente.')
       setLoading(false)
     }
-  }
-
-  function handleSubmit() {
-    if (!title.trim() || !neighborhood.trim()) return
-    setLoading(true)
-    navigator.geolocation.getCurrentPosition(
-      pos => submitWithCoords(pos.coords.latitude, pos.coords.longitude),
-      () => submitWithCoords(),
-      { timeout: 5000 },
-    )
   }
 
   return (
