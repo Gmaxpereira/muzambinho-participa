@@ -185,8 +185,13 @@ export default function SobrePage() {
         <div className="grid sm:grid-cols-2 gap-8">
           <div>
             <div
-              className="font-mono text-[13px] tracking-widest uppercase mb-3 font-semibold"
-              style={{ color: palette.accent }}
+              className="font-mono text-[12px] tracking-widest uppercase font-semibold mb-4 inline-flex items-center"
+              style={{
+                background: palette.accent,
+                color: '#fff',
+                padding: '5px 14px',
+                borderRadius: 999,
+              }}
             >
               Componente digital
             </div>
@@ -205,8 +210,13 @@ export default function SobrePage() {
           </div>
           <div>
             <div
-              className="font-mono text-[13px] tracking-widest uppercase mb-3 font-semibold"
-              style={{ color: palette.primary }}
+              className="font-mono text-[12px] tracking-widest uppercase font-semibold mb-4 inline-flex items-center"
+              style={{
+                background: palette.primary,
+                color: '#fff',
+                padding: '5px 14px',
+                borderRadius: 999,
+              }}
             >
               Componente presencial
             </div>
