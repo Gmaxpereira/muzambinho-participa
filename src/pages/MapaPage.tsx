@@ -29,6 +29,15 @@ export default function MapaPage() {
     getOccurrences().then(data => { setOccurrences(data); setLoading(false) })
   }, [])
 
+  useEffect(() => {
+    function onCreatedEvent(e: Event) {
+      const occ = (e as CustomEvent<Occurrence>).detail
+      setOccurrences(prev => prev.some(o => o.id === occ.id) ? prev : [occ, ...prev])
+    }
+    window.addEventListener('muzambinho:occurrence-created', onCreatedEvent)
+    return () => window.removeEventListener('muzambinho:occurrence-created', onCreatedEvent)
+  }, [])
+
   const filtered = useMemo(
     () => filter === 'all' ? occurrences : occurrences.filter(o => o.type === filter),
     [filter, occurrences],

@@ -194,6 +194,7 @@ export async function createOccurrence(dto: CreateOccurrenceDto): Promise<Occurr
   const updated = [newOccurrence, ...current]
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
   localStorage.setItem(MY_OCCURRENCES_KEY, JSON.stringify([newOccurrence.id, ...getMyOccurrenceIds()]))
+  window.dispatchEvent(new CustomEvent('muzambinho:occurrence-created', { detail: newOccurrence }))
   return newOccurrence
 }
 
