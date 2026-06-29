@@ -2,7 +2,7 @@
 
 ## Resumo do Projeto
 
-"Muzambinho Participa" é um MVP de demonstração para a Etapa 4 da disciplina de Cidades Inteligentes do IFSULDEMINAS — câmpus Muzambinho. É uma plataforma híbrida de participação popular que permite aos cidadãos registrar ocorrências urbanas (resíduos, esgoto, drenagem), acompanhar indicadores ISO 37120/22/23 em tempo real e participar de consultas públicas que alimentam diretamente o Plano Diretor de Drenagem. O arranjo é tripartite: Prefeitura + Universidade + Sociedade Civil, operando nos níveis de informação, consulta e colaboração da escada de Arnstein (1969).
+"Muzambinho Participa" é um MVP de demonstração para a Etapa 4 da disciplina de Cidades Inteligentes da PUC Minas — Campus Poços de Caldas. É uma plataforma híbrida de participação popular que permite aos cidadãos registrar ocorrências urbanas (resíduos, esgoto, drenagem), acompanhar indicadores ISO 37120/22/23 em tempo real e participar de consultas públicas que alimentam diretamente o Plano Diretor de Drenagem. O arranjo é tripartite: Prefeitura + Universidade + Sociedade Civil, operando nos níveis de informação, consulta e colaboração da escada de Arnstein (1969).
 
 ---
 

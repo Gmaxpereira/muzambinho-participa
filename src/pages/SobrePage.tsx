@@ -430,7 +430,7 @@ export default function SobrePage() {
           style={{ borderTop: `1px solid ${palette.line}`, color: palette.muted }}
         >
           <span>MVP · Etapa 4 · 2026</span>
-          <span>IFSULDEMINAS · Muzambinho / MG</span>
+          <span>PUC Minas — Poços de Caldas / MG</span>
         </div>
       </section>
     </article>
